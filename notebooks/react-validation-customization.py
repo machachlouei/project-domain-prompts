@@ -1,108 +1,131 @@
 import openai
-import json
+import time
 
-# OpenAI API Key
-OPENAI_API_KEY = "your_openai_api_key"
-openai.api_key = OPENAI_API_KEY
+# Define API Key (Use your OpenAI API key or a local LLM endpoint)
+API_KEY = "your_openai_api_key"
 
-# Evaluation Metrics Thresholds
-EVALUATION_THRESHOLDS = {
-    "Relevancy": 4.0,  # Minimum acceptable score
-    "Hallucination": 2.0,  # Lower is better
-    "Groundedness": 4.0,
-    "Comprehensiveness": 4.0
-}
+openai.api_key = API_KEY
 
-# Sample validation assessment instruction
-validation_instruction = """
-Assess whether the model's assumptions and theoretical framework are consistent with best practices.
-Examine if the validation report provides a clear assessment of model risks and mitigation strategies.
+# Predefined validation assessment instruction
+validation_instruction = "Assess whether core requirements align with model objectives."
+
+# Simulated retrieved context (In real implementation, use a RAG pipeline)
+contextual_information = """
+Model Development Document (MDD) Excerpt:
+- Model Objective: Ensure generalization across different customer segments.
+- Core Requirements: Must perform well on historical data, but does not explicitly mention segmentation validation.
 """
 
-# ReAct-CoT Prompt Function
-def react_cot_prompt(input_text):
-    return f"""
-    You are an expert model validator using the ReAct framework. 
-    Your task is to generate a validation report while dynamically retrieving additional context if needed.
-    
-    Step 1: Identify key validation objectives.
-    Step 2: Retrieve any relevant theoretical background if needed.
-    Step 3: Apply structured analysis to check model assumptions and framework.
-    Step 4: Evaluate risks and mitigation strategies.
-    Step 5: Assess output quality based on Relevancy, Hallucination, Groundedness, and Comprehensiveness.
-    Step 6: If evaluation scores are below threshold, refine the report.
-
-    Instruction:
-    {input_text}
-
-    Generate a well-structured validation report.
-    """
-
-# Function to generate validation report using GPT-4 API
-def generate_validation_report(instruction):
-    prompt = react_cot_prompt(instruction)
+# Function to call OpenAI API (or a local LLM)
+def call_llm(prompt):
     response = openai.ChatCompletion.create(
         model="gpt-4",
-        messages=[{"role": "system", "content": "You are an expert model validator."},
-                  {"role": "user", "content": prompt}]
+        messages=[{"role": "system", "content": "You are an AI assisting with model validation."},
+                  {"role": "user", "content": prompt}],
+        max_tokens=500
     )
     return response["choices"][0]["message"]["content"]
 
-# Function to evaluate generated report
-def evaluate_generated_report(report):
-    evaluation_prompt = f"""
-    Evaluate the following AI-generated validation report based on:
-    
-    1. Relevancy (1-5): Does it address key aspects of the problem?
-    2. Hallucination (1-5): Does it introduce false information?
-    3. Groundedness (1-5): Are claims well-supported?
-    4. Comprehensiveness (1-5): Does it provide a full assessment?
-
-    Generated Report:
-    {report}
-
-    Provide JSON output with scores for each metric.
+# ReAct Algorithm Implementation
+def react_validation_assessment(validation_instruction, context, max_iterations=3):
     """
-    evaluation_response = openai.ChatCompletion.create(
-        model="gpt-4",
-        messages=[{"role": "system", "content": "You are a senior model validation evaluator."},
-                  {"role": "user", "content": evaluation_prompt}]
-    )
-    return json.loads(evaluation_response["choices"][0]["message"]["content"])
+    Implements the ReAct framework for validation assessment.
+    Uses an iterative approach to refine reasoning, retrieve additional context, and generate a report.
+    """
+    reasoning_steps = []
+    for iteration in range(max_iterations):
+        print(f"Iteration {iteration + 1}...")
 
-# Function to check if output meets quality thresholds
-def meets_quality_thresholds(scores, thresholds):
-    return all(scores[metric] >= thresholds[metric] for metric in thresholds)
+        # 1. Thought Generation
+        thought_prompt = f"""
+        Given the validation instruction: "{validation_instruction}"
+        and the retrieved context: "{context}"
+        What additional information is needed for a thorough assessment?
+        """
+        thought = call_llm(thought_prompt)
+        reasoning_steps.append(f"Thought {iteration+1}: {thought}")
 
-# Iterative ReAct Evaluation Loop
-def iterative_evaluation(instruction, max_iterations=3):
-    iteration = 0
-    while iteration < max_iterations:
-        print(f"\n🔄 Iteration {iteration + 1}: Generating Validation Report...")
-        generated_report = generate_validation_report(instruction)
-        
-        print("\n🔍 Evaluating Generated Report...")
-        llm_scores = evaluate_generated_report(generated_report)
+        # 2. Action Selection (Fetch More Context)
+        action_prompt = f"""
+        Based on the thought: "{thought}"
+        Formulate a query to retrieve missing contextual details from the Model Development Document.
+        """
+        action = call_llm(action_prompt)
+        reasoning_steps.append(f"Action {iteration+1}: {action}")
 
-        print("\n📊 LLM Evaluation Scores:")
-        print(llm_scores)
+        # Simulating context retrieval (In real use, connect to a RAG system)
+        additional_context = f"Retrieved context: Simulated additional information based on: {action}"
+        context += "\n" + additional_context
 
-        if meets_quality_thresholds(llm_scores, EVALUATION_THRESHOLDS):
-            print("\n✅ Report meets quality criteria. Finalizing output.")
-            return generated_report, llm_scores
-        else:
-            print("\n⚠️ Report does NOT meet quality criteria. Refining response...\n")
-            iteration += 1
+        # 3. Observation Collection
+        observation_prompt = f"""
+        Using the updated context: "{context}"
+        Provide an observation regarding how core requirements align with model objectives.
+        """
+        observation = call_llm(observation_prompt)
+        reasoning_steps.append(f"Observation {iteration+1}: {observation}")
 
-    print("\n❌ Maximum iterations reached. Returning best attempt.")
-    return generated_report, llm_scores
+        # Check if enough context has been retrieved
+        if "sufficient" in observation.lower():
+            print("Enough context retrieved. Proceeding to report generation...")
+            break
 
-# Run Experiment
-if __name__ == "__main__":
-    final_report, final_scores = iterative_evaluation(validation_instruction)
+        time.sleep(2)  # Avoid hitting API rate limits
 
-    print("\n🔹 Final Generated Validation Report:")
-    print(final_report)
+    # 4. Final Validation Report Generation
+    report_prompt = f"""
+    Based on the final observations and retrieved context, generate a structured validation report.
+    Validation Assessment: {validation_instruction}
+    Context: {context}
+    Provide a detailed and structured response.
+    """
+    validation_report = call_llm(report_prompt)
+    return validation_report, reasoning_steps
 
-    print("\n🔹 Final Evaluation Scores:")
-    print(final_scores)
+# Run ReAct-based Validation Assessment
+generated_report, reasoning_trace = react_validation_assessment(validation_instruction, contextual_information)
+
+# Print the validation report
+print("\nGenerated Validation Report:\n")
+print(generated_report)
+
+# Print the reasoning steps (debugging)
+print("\nReAct Reasoning Trace:\n")
+for step in reasoning_trace:
+    print(step)
+
+# Automated Evaluation of the Generated Report
+def evaluate_report(report, context):
+    """
+    Uses another LLM to assess the generated report based on evaluation metrics:
+    - Relevancy
+    - Hallucination
+    - Comprehensiveness
+    - Groundedness
+    """
+    evaluation_prompt = f"""
+    Evaluate the following validation report based on the retrieved context.
+    Validation Report: "{report}"
+    Context: "{context}"
+    
+    Provide scores from 1 to 5 for the following criteria:
+    1. Relevancy (Does the report answer the validation instruction?)
+    2. Hallucination (Does the report introduce incorrect or unsupported information?)
+    3. Comprehensiveness (Does the report cover all key aspects?)
+    4. Groundedness (Is the report supported by the retrieved context?)
+    
+    Format your response as:
+    Relevancy: X
+    Hallucination: X
+    Comprehensiveness: X
+    Groundedness: X
+    """
+    evaluation_result = call_llm(evaluation_prompt)
+    return evaluation_result
+
+# Run Evaluation
+evaluation_scores = evaluate_report(generated_report, contextual_information)
+
+# Print Evaluation Scores
+print("\nEvaluation Scores:\n")
+print(evaluation_scores)
