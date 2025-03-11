@@ -1,6 +1,6 @@
 # Data Requirements for ReAct-based Model Validation Assessment
 
-## 1. Validation Assessment Instructions (You Already Have These)
+## 1. Validation Assessment Instructions (We Already Have These)
 These are the predefined assessment criteria that the model validation report needs to follow.
 
 **Example**:  
