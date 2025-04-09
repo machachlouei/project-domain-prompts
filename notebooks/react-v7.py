@@ -1,3 +1,68 @@
+def evaluate_context_quality(context, validation_instruction, max_retries=2):
+    """
+    Evaluate retrieved context against a validation instruction using:
+    - Relevancy
+    - Completeness
+    - Specificity
+
+    Each criterion includes both a numeric score (1-5) and justification.
+    """
+    evaluation_prompt = f"""
+Evaluate the following retrieved context in relation to the validation instruction using three criteria:
+
+1. Relevancy – How directly does the context address the instruction?
+2. Completeness – Are all required elements present to answer the instruction fully?
+3. Specificity – Does the context cite specific items (terms, metrics, definitions) from the document?
+
+Validation Instruction:
+"{validation_instruction}"
+
+Retrieved Context:
+"{context}"
+
+Return your evaluation as a JSON object in the following format:
+
+{{
+  "Relevancy": {{
+    "Score": X,
+    "Justification": "Explanation for why this score was given for relevancy..."
+  }},
+  "Completeness": {{
+    "Score": Y,
+    "Justification": "Explanation for completeness..."
+  }},
+  "Specificity": {{
+    "Score": Z,
+    "Justification": "Explanation for specificity..."
+  }}
+}}
+
+Where X, Y, Z are scores from 1 (very poor) to 5 (excellent).
+Do not include any commentary outside the JSON structure.
+"""
+
+    for attempt in range(max_retries):
+        response = call_llm(evaluation_prompt, temperature=0.3)
+
+        try:
+            scores = json.loads(response.strip())
+            if all(metric in scores for metric in ["Relevancy", "Completeness", "Specificity"]):
+                avg_score = (
+                    scores["Relevancy"]["Score"]
+                    + scores["Completeness"]["Score"]
+                    + scores["Specificity"]["Score"]
+                ) / 3
+                return avg_score, scores
+        except Exception:
+            pass  # Optionally log the response here for debugging
+
+    # Fallback if parsing fails
+    return 0.0, {
+        "Relevancy": {"Score": 0, "Justification": "Parsing failed."},
+        "Completeness": {"Score": 0, "Justification": "Parsing failed."},
+        "Specificity": {"Score": 0, "Justification": "Parsing failed."}
+    }
+
 def react_validation_assessment(validation_instruction, text):
     """
     Implements the ReAct framework for validation assessment.
