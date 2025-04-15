@@ -1,0 +1,17 @@
+[
+  {
+    "id": "instruction_001",
+    "instruction": "Assess whether core model requirements are aligned with the model's stated objectives.",
+    "context": "The model is designed to identify potential elder financial abuse (EFA) based on free-text notes recorded by bankers. It uses a LightGBM classifier trained on 2,000 labeled examples, each labeled by domain experts. The objective of the model is to improve early detection of EFA through language pattern recognition in narrative customer interaction logs. Inputs include TF-IDF features extracted from normalized, preprocessed banker notes."
+  },
+  {
+    "id": "instruction_002",
+    "instruction": "Evaluate whether the input features are relevant and appropriate for the prediction task.",
+    "context": "The model uses term frequency-inverse document frequency (TF-IDF) scores as the primary features, along with additional inputs such as sentiment scores and a flag for known EFA phrases. These features were selected based on exploratory data analysis and expert review to ensure alignment with linguistic patterns associated with financial abuse. The raw text is lemmatized and tokenized prior to vectorization."
+  },
+  {
+    "id": "instruction_003",
+    "instruction": "Determine whether the model assumptions are clearly stated and tested.",
+    "context": "The modeling team assumes that TF-IDF features are independent and that the training labels represent ground truth. The LightGBM model does not assume feature linearity, but regularization was applied to prevent overfitting. Assumptions were tested through cross-validation and inspection of label noise."
+  }
+]
