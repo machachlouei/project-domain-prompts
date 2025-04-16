@@ -1,0 +1,140 @@
+[
+  {
+    "id": "001",
+    "instruction": "Review the core requirements for the overall theory, design, and selection of the modeling framework.",
+    "context": "LightGBM was selected due to its balance of interpretability and performance on tabular TF-IDF data. It provides feature importance outputs and rapid retraining.",
+    "model": "gpt-4o",
+    "prompting_technique": "zero_shot_cot",
+    "prompt": "You are a model validation expert. Your task is to assess whether a model development document (MDD) provides adequate evidence to satisfy a specific validation instruction.\n\nYou will be given:\n- An instruction that defines what should be validated.\n- Context extracted from the MDD that may or may not contain relevant evidence.\n\nPlease reason step by step and then provide your final assessment.\n\n---\n\nInstruction:\nReview the core requirements for the overall theory, design, and selection of the modeling framework.\n\nContext:\nLightGBM was selected due to its balance of interpretability and performance on tabular TF-IDF data. It provides feature importance outputs and rapid retraining.\n\n---\n\nStep-by-Step Reasoning:\n1.",
+    "response": "Step-by-Step Reasoning:\n1. The instruction asks for an evaluation of the theoretical soundness and design rationale for the modeling framework.\n2. The context states that LightGBM was chosen for its interpretability, performance, and retraining efficiency.\n3. These attributes support sound theoretical justification, especially for compliance-driven models where transparency is key.\n4. The only potential gap is the absence of alternative model comparisons or deeper justification of model suitability.\n\nFinal Assessment:\nThe model framework is well aligned with the stated design goals. LightGBM is appropriately chosen for its interpretability and efficiency, supporting risk and compliance considerations. While the rationale is solid, it would benefit from comparative analysis to alternative methods.",
+    "evaluation": {
+      "relevancy": {
+        "score": 5,
+        "rationale": "Fully responds to the instruction with context-specific reasoning and conclusion."
+      },
+      "completeness": {
+        "score": 5,
+        "rationale": "Identifies missing validation in 002, otherwise comprehensive in each case."
+      },
+      "specificity": {
+        "score": 5,
+        "rationale": "Uses direct context references and critical thinking to justify the final evaluation."
+      },
+      "errors": {
+        "hallucination": {
+          "exists": false,
+          "evidence": "",
+          "severity": "low"
+        },
+        "redundancy": {
+          "exists": false,
+          "evidence": "",
+          "severity": "low"
+        },
+        "lack_of_specificity": {
+          "exists": false,
+          "evidence": "",
+          "severity": "low"
+        }
+      }
+    },
+    "generation_metadata": {
+      "temperature": 0.3,
+      "top_p": 0.95,
+      "max_tokens": 600,
+      "timestamp": "2025-04-16T19:50:38.164467"
+    }
+  },
+  {
+    "id": "002",
+    "instruction": "Assess whether the model assumptions are clearly stated and validated.",
+    "context": "Assumes independence between TF-IDF feature dimensions. Assumes the label annotations are accurate representations of ground truth.",
+    "model": "gpt-4o",
+    "prompting_technique": "zero_shot_cot",
+    "prompt": "You are a model validation expert. Your task is to assess whether a model development document (MDD) provides adequate evidence to satisfy a specific validation instruction.\n\nYou will be given:\n- An instruction that defines what should be validated.\n- Context extracted from the MDD that may or may not contain relevant evidence.\n\nPlease reason step by step and then provide your final assessment.\n\n---\n\nInstruction:\nAssess whether the model assumptions are clearly stated and validated.\n\nContext:\nAssumes independence between TF-IDF feature dimensions. Assumes the label annotations are accurate representations of ground truth.\n\n---\n\nStep-by-Step Reasoning:\n1.",
+    "response": "Step-by-Step Reasoning:\n1. The instruction requires that assumptions be both stated and validated.\n2. The context lists two assumptions: TF-IDF feature independence and label accuracy.\n3. However, no validation procedures\u2014like feature correlation checks or label reliability analysis\u2014are mentioned.\n4. The assumptions are therefore clear but not empirically verified.\n\nFinal Assessment:\nThe assumptions are transparent but lack supporting validation. Without testing these assumptions, their impact on model reliability remains uncertain.",
+    "evaluation": {
+      "relevancy": {
+        "score": 5,
+        "rationale": "Fully responds to the instruction with context-specific reasoning and conclusion."
+      },
+      "completeness": {
+        "score": 4,
+        "rationale": "Identifies missing validation in 002, otherwise comprehensive in each case."
+      },
+      "specificity": {
+        "score": 5,
+        "rationale": "Uses direct context references and critical thinking to justify the final evaluation."
+      },
+      "errors": {
+        "hallucination": {
+          "exists": false,
+          "evidence": "",
+          "severity": "low"
+        },
+        "redundancy": {
+          "exists": false,
+          "evidence": "",
+          "severity": "low"
+        },
+        "lack_of_specificity": {
+          "exists": false,
+          "evidence": "",
+          "severity": "low"
+        }
+      }
+    },
+    "generation_metadata": {
+      "temperature": 0.3,
+      "top_p": 0.95,
+      "max_tokens": 600,
+      "timestamp": "2025-04-16T19:50:38.164478"
+    }
+  },
+  {
+    "id": "003",
+    "instruction": "Review and summarize the information on data sources, including reasonableness of accessed or excluded data.",
+    "context": "The dataset includes 2,000 anonymized bankers\u2019 notes extracted from the internal CRM platform... Each note was manually labeled... by trained compliance officers.",
+    "model": "gpt-4o",
+    "prompting_technique": "zero_shot_cot",
+    "prompt": "You are a model validation expert. Your task is to assess whether a model development document (MDD) provides adequate evidence to satisfy a specific validation instruction.\n\nYou will be given:\n- An instruction that defines what should be validated.\n- Context extracted from the MDD that may or may not contain relevant evidence.\n\nPlease reason step by step and then provide your final assessment.\n\n---\n\nInstruction:\nReview and summarize the information on data sources, including reasonableness of accessed or excluded data.\n\nContext:\nThe dataset includes 2,000 anonymized bankers\u2019 notes extracted from the internal CRM platform... Each note was manually labeled... by trained compliance officers.\n\n---\n\nStep-by-Step Reasoning:\n1.",
+    "response": "Step-by-Step Reasoning:\n1. The instruction expects a review of data source description and its appropriateness.\n2. The context explains that the data came from CRM systems and was manually labeled by compliance experts.\n3. This suggests strong data governance and relevance to the problem.\n4. There\u2019s no mention of excluded data, but nothing appears unreasonable.\n\nFinal Assessment:\nThe MDD provides sufficient detail about data sourcing and labeling. The source is appropriate and the annotation by experts adds credibility. There is no indication of inappropriate exclusions.",
+    "evaluation": {
+      "relevancy": {
+        "score": 5,
+        "rationale": "Fully responds to the instruction with context-specific reasoning and conclusion."
+      },
+      "completeness": {
+        "score": 5,
+        "rationale": "Identifies missing validation in 002, otherwise comprehensive in each case."
+      },
+      "specificity": {
+        "score": 5,
+        "rationale": "Uses direct context references and critical thinking to justify the final evaluation."
+      },
+      "errors": {
+        "hallucination": {
+          "exists": false,
+          "evidence": "",
+          "severity": "low"
+        },
+        "redundancy": {
+          "exists": false,
+          "evidence": "",
+          "severity": "low"
+        },
+        "lack_of_specificity": {
+          "exists": false,
+          "evidence": "",
+          "severity": "low"
+        }
+      }
+    },
+    "generation_metadata": {
+      "temperature": 0.3,
+      "top_p": 0.95,
+      "max_tokens": 600,
+      "timestamp": "2025-04-16T19:50:38.164483"
+    }
+  }
+]

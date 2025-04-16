@@ -1,0 +1,46 @@
+{
+  "id": "001",
+  "instruction": "Assess whether core model requirements align with model objectives.",
+  "context": "The model is designed to detect risk segments using logistic regression trained on internal behavioral data...",
+  "model": "qwen7b",
+  "prompting_technique": "2. few_shot",
+  "prompt": "\nInstruction: Assess whether core model requirements align with model objectives.\n\nContext:\nThe model is designed to detect risk segments using logistic regression trained on internal behavioral data...\n\nPlease generate a response based on the instruction and context above.\n",
+  "response": "[Simulated response from qwen7b using prompt: \nInstruction: Assess whether core model requirements align w...]",
+  "evaluation": {
+    "relevancy": {
+      "score": 4,
+      "rationale": "Covers instruction topic adequately."
+    },
+    "completeness": {
+      "score": 3,
+      "rationale": "Includes most key elements."
+    },
+    "specificity": {
+      "score": 2,
+      "rationale": "Mentions document-specific terms."
+    },
+    "errors": {
+      "hallucination": {
+        "exists": false,
+        "evidence": "Mentions a feature not present in context.",
+        "severity": "high"
+      },
+      "redundancy": {
+        "exists": true,
+        "evidence": "Repeats same phrase or point.",
+        "severity": "low"
+      },
+      "lack_of_specificity": {
+        "exists": true,
+        "evidence": "Uses vague terms without citing context.",
+        "severity": "low"
+      }
+    }
+  },
+  "generation_metadata": {
+    "temperature": 0.3,
+    "top_p": 0.95,
+    "max_tokens": 600,
+    "timestamp": "2025-04-16T14:09:46.643356"
+  }
+}

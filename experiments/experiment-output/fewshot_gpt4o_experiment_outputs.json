@@ -1,0 +1,324 @@
+[
+  {
+    "id": "001",
+    "instruction": "Review the core requirements for the overall theory, design, and selection of the modeling framework.",
+    "context": "LightGBM was selected due to its balance of interpretability and performance on tabular TF-IDF data. It provides feature importance outputs and rapid retraining.",
+    "model": "gpt-4o",
+    "prompting_technique": "few_shot",
+    "prompt": "You are a model validation expert. Given an instruction and a related excerpt from a model development document (MDD), your task is to write a professional validation assessment.\n\nYour response should:\n- Clearly address the instruction.\n- Reference specific evidence from the context.\n- Be evaluative, not merely descriptive.\n\nBelow are two examples of high-quality responses.\n\n---\n\nExample 1\n\nInstruction:\nAssess whether the model assumptions are clearly stated and validated.\n\nContext:\nAssumes independence between TF-IDF feature dimensions. Assumes the label annotations are accurate representations of ground truth.\n\nResponse:\nThe model assumptions are clearly described, particularly the independence of TF-IDF features and trust in labeling accuracy. However, the MDD does not provide evidence that these assumptions were empirically tested\u2014e.g., through multicollinearity checks or label consistency audits. As such, while assumptions are well-articulated, their validation remains incomplete.\n\n---\n\nExample 2\n\nInstruction:\nReview the data quality analysis performed in the MDD.\n\nContext:\nNo missing records were observed in the dataset. Data was verified by compliance leads to ensure labeling consistency. All text records were processed using consistent UTF-8 encoding.\n\nResponse:\nThe MDD provides a data quality assessment. It addresses completeness (no missing records), accuracy (compliance-led verification), and consistency (uniform encoding standards). These checks are comprehensive and appropriately scoped for the model\u2019s reliance on free-text inputs, supporting confidence in the input data pipeline.\n\n---\n\nInstruction:\nReview the core requirements for the overall theory, design, and selection of the modeling framework.\n\nContext:\nLightGBM was selected due to its balance of interpretability and performance on tabular TF-IDF data. It provides feature importance outputs and rapid retraining.\n\nResponse:\n",
+    "response": "The MDD provides a clear justification for the model framework. LightGBM was selected for its interpretability and computational efficiency, both critical for regulated environments. The mention of feature importance and retraining supports the appropriateness of the design. These points suggest the theoretical and operational requirements have been properly addressed.",
+    "evaluation": {
+      "relevancy": {
+        "score": 5,
+        "rationale": "Instruction is addressed directly using details from the context."
+      },
+      "completeness": {
+        "score": 5,
+        "rationale": "Covers all required aspects, though minor gaps noted in specific cases."
+      },
+      "specificity": {
+        "score": 5,
+        "rationale": "References document-specific elements with clear validation reasoning."
+      },
+      "errors": {
+        "hallucination": {
+          "exists": false,
+          "evidence": "",
+          "severity": "low"
+        },
+        "redundancy": {
+          "exists": false,
+          "evidence": "",
+          "severity": "low"
+        },
+        "lack_of_specificity": {
+          "exists": false,
+          "evidence": "",
+          "severity": "low"
+        }
+      }
+    },
+    "generation_metadata": {
+      "temperature": 0.3,
+      "top_p": 0.95,
+      "max_tokens": 600,
+      "timestamp": "2025-04-16T19:46:37.281728"
+    }
+  },
+  {
+    "id": "002",
+    "instruction": "Assess whether the model assumptions are clearly stated and validated.",
+    "context": "Assumes independence between TF-IDF feature dimensions. Assumes the label annotations are accurate representations of ground truth.",
+    "model": "gpt-4o",
+    "prompting_technique": "few_shot",
+    "prompt": "You are a model validation expert. Given an instruction and a related excerpt from a model development document (MDD), your task is to write a professional validation assessment.\n\nYour response should:\n- Clearly address the instruction.\n- Reference specific evidence from the context.\n- Be evaluative, not merely descriptive.\n\nBelow are two examples of high-quality responses.\n\n---\n\nExample 1\n\nInstruction:\nAssess whether the model assumptions are clearly stated and validated.\n\nContext:\nAssumes independence between TF-IDF feature dimensions. Assumes the label annotations are accurate representations of ground truth.\n\nResponse:\nThe model assumptions are clearly described, particularly the independence of TF-IDF features and trust in labeling accuracy. However, the MDD does not provide evidence that these assumptions were empirically tested\u2014e.g., through multicollinearity checks or label consistency audits. As such, while assumptions are well-articulated, their validation remains incomplete.\n\n---\n\nExample 2\n\nInstruction:\nReview the data quality analysis performed in the MDD.\n\nContext:\nNo missing records were observed in the dataset. Data was verified by compliance leads to ensure labeling consistency. All text records were processed using consistent UTF-8 encoding.\n\nResponse:\nThe MDD provides a data quality assessment. It addresses completeness (no missing records), accuracy (compliance-led verification), and consistency (uniform encoding standards). These checks are comprehensive and appropriately scoped for the model\u2019s reliance on free-text inputs, supporting confidence in the input data pipeline.\n\n---\n\nInstruction:\nAssess whether the model assumptions are clearly stated and validated.\n\nContext:\nAssumes independence between TF-IDF feature dimensions. Assumes the label annotations are accurate representations of ground truth.\n\nResponse:\n",
+    "response": "The model assumptions are explicitly stated, which is a strength. However, the MDD does not describe any validation techniques such as correlation analysis or label noise checks. As a result, while the assumptions are transparent, their untested status limits confidence in their reliability.",
+    "evaluation": {
+      "relevancy": {
+        "score": 5,
+        "rationale": "Instruction is addressed directly using details from the context."
+      },
+      "completeness": {
+        "score": 5,
+        "rationale": "Covers all required aspects, though minor gaps noted in specific cases."
+      },
+      "specificity": {
+        "score": 5,
+        "rationale": "References document-specific elements with clear validation reasoning."
+      },
+      "errors": {
+        "hallucination": {
+          "exists": false,
+          "evidence": "",
+          "severity": "low"
+        },
+        "redundancy": {
+          "exists": false,
+          "evidence": "",
+          "severity": "low"
+        },
+        "lack_of_specificity": {
+          "exists": false,
+          "evidence": "",
+          "severity": "low"
+        }
+      }
+    },
+    "generation_metadata": {
+      "temperature": 0.3,
+      "top_p": 0.95,
+      "max_tokens": 600,
+      "timestamp": "2025-04-16T19:46:37.281740"
+    }
+  },
+  {
+    "id": "003",
+    "instruction": "Review and summarize the information on data sources, including reasonableness of accessed or excluded data.",
+    "context": "The dataset includes 2,000 anonymized bankers\u2019 notes extracted from the internal CRM platform... Each note was manually labeled... by trained compliance officers.",
+    "model": "gpt-4o",
+    "prompting_technique": "few_shot",
+    "prompt": "You are a model validation expert. Given an instruction and a related excerpt from a model development document (MDD), your task is to write a professional validation assessment.\n\nYour response should:\n- Clearly address the instruction.\n- Reference specific evidence from the context.\n- Be evaluative, not merely descriptive.\n\nBelow are two examples of high-quality responses.\n\n---\n\nExample 1\n\nInstruction:\nAssess whether the model assumptions are clearly stated and validated.\n\nContext:\nAssumes independence between TF-IDF feature dimensions. Assumes the label annotations are accurate representations of ground truth.\n\nResponse:\nThe model assumptions are clearly described, particularly the independence of TF-IDF features and trust in labeling accuracy. However, the MDD does not provide evidence that these assumptions were empirically tested\u2014e.g., through multicollinearity checks or label consistency audits. As such, while assumptions are well-articulated, their validation remains incomplete.\n\n---\n\nExample 2\n\nInstruction:\nReview the data quality analysis performed in the MDD.\n\nContext:\nNo missing records were observed in the dataset. Data was verified by compliance leads to ensure labeling consistency. All text records were processed using consistent UTF-8 encoding.\n\nResponse:\nThe MDD provides a data quality assessment. It addresses completeness (no missing records), accuracy (compliance-led verification), and consistency (uniform encoding standards). These checks are comprehensive and appropriately scoped for the model\u2019s reliance on free-text inputs, supporting confidence in the input data pipeline.\n\n---\n\nInstruction:\nReview and summarize the information on data sources, including reasonableness of accessed or excluded data.\n\nContext:\nThe dataset includes 2,000 anonymized bankers\u2019 notes extracted from the internal CRM platform... Each note was manually labeled... by trained compliance officers.\n\nResponse:\n",
+    "response": "The data source is clearly described and highly relevant to the problem. It originates from internal CRM systems and includes annotations by domain experts, which adds to its credibility. The volume and scope appear sufficient, supporting the appropriateness of data selection for the classification task.",
+    "evaluation": {
+      "relevancy": {
+        "score": 5,
+        "rationale": "Instruction is addressed directly using details from the context."
+      },
+      "completeness": {
+        "score": 5,
+        "rationale": "Covers all required aspects, though minor gaps noted in specific cases."
+      },
+      "specificity": {
+        "score": 5,
+        "rationale": "References document-specific elements with clear validation reasoning."
+      },
+      "errors": {
+        "hallucination": {
+          "exists": false,
+          "evidence": "",
+          "severity": "low"
+        },
+        "redundancy": {
+          "exists": false,
+          "evidence": "",
+          "severity": "low"
+        },
+        "lack_of_specificity": {
+          "exists": false,
+          "evidence": "",
+          "severity": "low"
+        }
+      }
+    },
+    "generation_metadata": {
+      "temperature": 0.3,
+      "top_p": 0.95,
+      "max_tokens": 600,
+      "timestamp": "2025-04-16T19:46:37.281745"
+    }
+  },
+  {
+    "id": "004",
+    "instruction": "Review the data quality analysis performed in the MDD.",
+    "context": "No missing records were observed... Data was verified by compliance leads... All text records were processed using consistent UTF-8 encoding...",
+    "model": "gpt-4o",
+    "prompting_technique": "few_shot",
+    "prompt": "You are a model validation expert. Given an instruction and a related excerpt from a model development document (MDD), your task is to write a professional validation assessment.\n\nYour response should:\n- Clearly address the instruction.\n- Reference specific evidence from the context.\n- Be evaluative, not merely descriptive.\n\nBelow are two examples of high-quality responses.\n\n---\n\nExample 1\n\nInstruction:\nAssess whether the model assumptions are clearly stated and validated.\n\nContext:\nAssumes independence between TF-IDF feature dimensions. Assumes the label annotations are accurate representations of ground truth.\n\nResponse:\nThe model assumptions are clearly described, particularly the independence of TF-IDF features and trust in labeling accuracy. However, the MDD does not provide evidence that these assumptions were empirically tested\u2014e.g., through multicollinearity checks or label consistency audits. As such, while assumptions are well-articulated, their validation remains incomplete.\n\n---\n\nExample 2\n\nInstruction:\nReview the data quality analysis performed in the MDD.\n\nContext:\nNo missing records were observed in the dataset. Data was verified by compliance leads to ensure labeling consistency. All text records were processed using consistent UTF-8 encoding.\n\nResponse:\nThe MDD provides a data quality assessment. It addresses completeness (no missing records), accuracy (compliance-led verification), and consistency (uniform encoding standards). These checks are comprehensive and appropriately scoped for the model\u2019s reliance on free-text inputs, supporting confidence in the input data pipeline.\n\n---\n\nInstruction:\nReview the data quality analysis performed in the MDD.\n\nContext:\nNo missing records were observed... Data was verified by compliance leads... All text records were processed using consistent UTF-8 encoding...\n\nResponse:\n",
+    "response": "The MDD covers all primary dimensions of data quality. It confirms completeness, accuracy, and consistency, including expert verification and standardized formatting. These practices reflect sound data governance and ensure the reliability of the input pipeline.",
+    "evaluation": {
+      "relevancy": {
+        "score": 5,
+        "rationale": "Instruction is addressed directly using details from the context."
+      },
+      "completeness": {
+        "score": 5,
+        "rationale": "Covers all required aspects, though minor gaps noted in specific cases."
+      },
+      "specificity": {
+        "score": 5,
+        "rationale": "References document-specific elements with clear validation reasoning."
+      },
+      "errors": {
+        "hallucination": {
+          "exists": false,
+          "evidence": "",
+          "severity": "low"
+        },
+        "redundancy": {
+          "exists": false,
+          "evidence": "",
+          "severity": "low"
+        },
+        "lack_of_specificity": {
+          "exists": false,
+          "evidence": "",
+          "severity": "low"
+        }
+      }
+    },
+    "generation_metadata": {
+      "temperature": 0.3,
+      "top_p": 0.95,
+      "max_tokens": 600,
+      "timestamp": "2025-04-16T19:46:37.281749"
+    }
+  },
+  {
+    "id": "006",
+    "instruction": "Assess whether the model outputs are consistent with the model objectives and requirements.",
+    "context": "The model is developed to classify bankers' notes as EFA or Non-EFA. It uses LightGBM as a binary classifier... trained on domain expert-labeled notes.",
+    "model": "gpt-4o",
+    "prompting_technique": "few_shot",
+    "prompt": "You are a model validation expert. Given an instruction and a related excerpt from a model development document (MDD), your task is to write a professional validation assessment.\n\nYour response should:\n- Clearly address the instruction.\n- Reference specific evidence from the context.\n- Be evaluative, not merely descriptive.\n\nBelow are two examples of high-quality responses.\n\n---\n\nExample 1\n\nInstruction:\nAssess whether the model assumptions are clearly stated and validated.\n\nContext:\nAssumes independence between TF-IDF feature dimensions. Assumes the label annotations are accurate representations of ground truth.\n\nResponse:\nThe model assumptions are clearly described, particularly the independence of TF-IDF features and trust in labeling accuracy. However, the MDD does not provide evidence that these assumptions were empirically tested\u2014e.g., through multicollinearity checks or label consistency audits. As such, while assumptions are well-articulated, their validation remains incomplete.\n\n---\n\nExample 2\n\nInstruction:\nReview the data quality analysis performed in the MDD.\n\nContext:\nNo missing records were observed in the dataset. Data was verified by compliance leads to ensure labeling consistency. All text records were processed using consistent UTF-8 encoding.\n\nResponse:\nThe MDD provides a data quality assessment. It addresses completeness (no missing records), accuracy (compliance-led verification), and consistency (uniform encoding standards). These checks are comprehensive and appropriately scoped for the model\u2019s reliance on free-text inputs, supporting confidence in the input data pipeline.\n\n---\n\nInstruction:\nAssess whether the model outputs are consistent with the model objectives and requirements.\n\nContext:\nThe model is developed to classify bankers' notes as EFA or Non-EFA. It uses LightGBM as a binary classifier... trained on domain expert-labeled notes.\n\nResponse:\n",
+    "response": "The model output is binary and directly maps to the classification goal stated in the MDD. The fact that the model is trained on expert-labeled data further supports consistency with the intended use case of identifying EFA-related notes.",
+    "evaluation": {
+      "relevancy": {
+        "score": 5,
+        "rationale": "Instruction is addressed directly using details from the context."
+      },
+      "completeness": {
+        "score": 5,
+        "rationale": "Covers all required aspects, though minor gaps noted in specific cases."
+      },
+      "specificity": {
+        "score": 5,
+        "rationale": "References document-specific elements with clear validation reasoning."
+      },
+      "errors": {
+        "hallucination": {
+          "exists": false,
+          "evidence": "",
+          "severity": "low"
+        },
+        "redundancy": {
+          "exists": false,
+          "evidence": "",
+          "severity": "low"
+        },
+        "lack_of_specificity": {
+          "exists": false,
+          "evidence": "",
+          "severity": "low"
+        }
+      }
+    },
+    "generation_metadata": {
+      "temperature": 0.3,
+      "top_p": 0.95,
+      "max_tokens": 600,
+      "timestamp": "2025-04-16T19:46:37.281754"
+    }
+  },
+  {
+    "id": "007",
+    "instruction": "Evaluate the quality and comprehensiveness of the developer\u2019s outcome testing.",
+    "context": "Performance metrics validated using 5-fold cross-validation. LightGBM outperformed Logistic Regression and Naive Bayes baselines by 6\u20138% F1 score.",
+    "model": "gpt-4o",
+    "prompting_technique": "few_shot",
+    "prompt": "You are a model validation expert. Given an instruction and a related excerpt from a model development document (MDD), your task is to write a professional validation assessment.\n\nYour response should:\n- Clearly address the instruction.\n- Reference specific evidence from the context.\n- Be evaluative, not merely descriptive.\n\nBelow are two examples of high-quality responses.\n\n---\n\nExample 1\n\nInstruction:\nAssess whether the model assumptions are clearly stated and validated.\n\nContext:\nAssumes independence between TF-IDF feature dimensions. Assumes the label annotations are accurate representations of ground truth.\n\nResponse:\nThe model assumptions are clearly described, particularly the independence of TF-IDF features and trust in labeling accuracy. However, the MDD does not provide evidence that these assumptions were empirically tested\u2014e.g., through multicollinearity checks or label consistency audits. As such, while assumptions are well-articulated, their validation remains incomplete.\n\n---\n\nExample 2\n\nInstruction:\nReview the data quality analysis performed in the MDD.\n\nContext:\nNo missing records were observed in the dataset. Data was verified by compliance leads to ensure labeling consistency. All text records were processed using consistent UTF-8 encoding.\n\nResponse:\nThe MDD provides a data quality assessment. It addresses completeness (no missing records), accuracy (compliance-led verification), and consistency (uniform encoding standards). These checks are comprehensive and appropriately scoped for the model\u2019s reliance on free-text inputs, supporting confidence in the input data pipeline.\n\n---\n\nInstruction:\nEvaluate the quality and comprehensiveness of the developer\u2019s outcome testing.\n\nContext:\nPerformance metrics validated using 5-fold cross-validation. LightGBM outperformed Logistic Regression and Naive Bayes baselines by 6\u20138% F1 score.\n\nResponse:\n",
+    "response": "The testing approach is solid, using 5-fold cross-validation to establish generalizability. The comparison to baseline models demonstrates added value. However, the MDD could be enhanced by providing more detail on performance across subgroups or edge cases.",
+    "evaluation": {
+      "relevancy": {
+        "score": 5,
+        "rationale": "Instruction is addressed directly using details from the context."
+      },
+      "completeness": {
+        "score": 4,
+        "rationale": "Covers all required aspects, though minor gaps noted in specific cases."
+      },
+      "specificity": {
+        "score": 5,
+        "rationale": "References document-specific elements with clear validation reasoning."
+      },
+      "errors": {
+        "hallucination": {
+          "exists": false,
+          "evidence": "",
+          "severity": "low"
+        },
+        "redundancy": {
+          "exists": false,
+          "evidence": "",
+          "severity": "low"
+        },
+        "lack_of_specificity": {
+          "exists": false,
+          "evidence": "",
+          "severity": "low"
+        }
+      }
+    },
+    "generation_metadata": {
+      "temperature": 0.3,
+      "top_p": 0.95,
+      "max_tokens": 600,
+      "timestamp": "2025-04-16T19:46:37.281771"
+    }
+  },
+  {
+    "id": "010",
+    "instruction": "Assess the model monitoring plans (frequency, KPIs, thresholds, etc.).",
+    "context": "Sensitivity analysis showed stable predictions with +/-10% TF-IDF variance.",
+    "model": "gpt-4o",
+    "prompting_technique": "few_shot",
+    "prompt": "You are a model validation expert. Given an instruction and a related excerpt from a model development document (MDD), your task is to write a professional validation assessment.\n\nYour response should:\n- Clearly address the instruction.\n- Reference specific evidence from the context.\n- Be evaluative, not merely descriptive.\n\nBelow are two examples of high-quality responses.\n\n---\n\nExample 1\n\nInstruction:\nAssess whether the model assumptions are clearly stated and validated.\n\nContext:\nAssumes independence between TF-IDF feature dimensions. Assumes the label annotations are accurate representations of ground truth.\n\nResponse:\nThe model assumptions are clearly described, particularly the independence of TF-IDF features and trust in labeling accuracy. However, the MDD does not provide evidence that these assumptions were empirically tested\u2014e.g., through multicollinearity checks or label consistency audits. As such, while assumptions are well-articulated, their validation remains incomplete.\n\n---\n\nExample 2\n\nInstruction:\nReview the data quality analysis performed in the MDD.\n\nContext:\nNo missing records were observed in the dataset. Data was verified by compliance leads to ensure labeling consistency. All text records were processed using consistent UTF-8 encoding.\n\nResponse:\nThe MDD provides a data quality assessment. It addresses completeness (no missing records), accuracy (compliance-led verification), and consistency (uniform encoding standards). These checks are comprehensive and appropriately scoped for the model\u2019s reliance on free-text inputs, supporting confidence in the input data pipeline.\n\n---\n\nInstruction:\nAssess the model monitoring plans (frequency, KPIs, thresholds, etc.).\n\nContext:\nSensitivity analysis showed stable predictions with +/-10% TF-IDF variance.\n\nResponse:\n",
+    "response": "The context provides basic insight into model stability via sensitivity testing, but lacks a formal monitoring plan. Key elements like KPI thresholds, update frequency, and exception handling protocols are missing, suggesting the monitoring strategy is underdeveloped.",
+    "evaluation": {
+      "relevancy": {
+        "score": 5,
+        "rationale": "Instruction is addressed directly using details from the context."
+      },
+      "completeness": {
+        "score": 4,
+        "rationale": "Covers all required aspects, though minor gaps noted in specific cases."
+      },
+      "specificity": {
+        "score": 4,
+        "rationale": "References document-specific elements with clear validation reasoning."
+      },
+      "errors": {
+        "hallucination": {
+          "exists": false,
+          "evidence": "",
+          "severity": "low"
+        },
+        "redundancy": {
+          "exists": false,
+          "evidence": "",
+          "severity": "low"
+        },
+        "lack_of_specificity": {
+          "exists": false,
+          "evidence": "",
+          "severity": "low"
+        }
+      }
+    },
+    "generation_metadata": {
+      "temperature": 0.3,
+      "top_p": 0.95,
+      "max_tokens": 600,
+      "timestamp": "2025-04-16T19:46:37.281781"
+    }
+  }
+]

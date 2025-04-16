@@ -1,0 +1,278 @@
+[
+  {
+    "id": "002",
+    "instruction": "Assess whether the model assumptions are clearly stated and validated.",
+    "context": "Assumes independence between TF-IDF feature dimensions. Assumes the label annotations are accurate representations of ground truth.",
+    "model": "gpt-4o",
+    "prompting_technique": "zero_shot",
+    "prompt": "You are a model validation expert specializing in risk, compliance, and documentation assessment.\n\nBelow is a specific instruction followed by supporting context from a model development document (MDD). Based on the instruction and the context, write a concise and well-structured validation assessment. Your response should:\n\n1. Address the instruction directly.\n2. Use specific evidence or phrases from the context to support your assessment.\n3. Be evaluative, not just descriptive.\n\n---\n\nInstruction:\nAssess whether the model assumptions are clearly stated and validated.\n\n---\n\nContext:\nAssumes independence between TF-IDF feature dimensions. Assumes the label annotations are accurate representations of ground truth.\n\n---\n\nYour Task:\nProvide a written validation assessment in 3\u20136 sentences that:\n- Responds directly to the instruction,\n- Cites or paraphrases relevant details from the context,\n- Offers a clear, professional judgment as a model validator.",
+    "response": "The MDD clearly states two key assumptions: independence of TF-IDF features and accuracy of expert labels. However, it does not present any validation efforts such as statistical correlation tests or label consistency checks. This makes the assumptions transparent but unverified, indicating an area that may warrant additional validation work.",
+    "evaluation": {
+      "relevancy": {
+        "score": 5,
+        "rationale": "Instruction is fully addressed using context-specific content."
+      },
+      "completeness": {
+        "score": 4,
+        "rationale": "Covers the instruction well, with minor depth or scope limitations."
+      },
+      "specificity": {
+        "score": 5,
+        "rationale": "Refers to explicit elements from the context and makes clear judgments."
+      },
+      "errors": {
+        "hallucination": {
+          "exists": false,
+          "evidence": "",
+          "severity": "low"
+        },
+        "redundancy": {
+          "exists": false,
+          "evidence": "",
+          "severity": "low"
+        },
+        "lack_of_specificity": {
+          "exists": false,
+          "evidence": "",
+          "severity": "low"
+        }
+      }
+    },
+    "generation_metadata": {
+      "temperature": 0.3,
+      "top_p": 0.95,
+      "max_tokens": 600,
+      "timestamp": "2025-04-16T19:42:27.444102"
+    }
+  },
+  {
+    "id": "003",
+    "instruction": "Review and summarize the information on data sources, including reasonableness of accessed or excluded data.",
+    "context": "The dataset includes 2,000 anonymized bankers\u2019 notes extracted from the internal CRM platform... Each note was manually labeled... by trained compliance officers.",
+    "model": "gpt-4o",
+    "prompting_technique": "zero_shot",
+    "prompt": "You are a model validation expert specializing in risk, compliance, and documentation assessment.\n\nBelow is a specific instruction followed by supporting context from a model development document (MDD). Based on the instruction and the context, write a concise and well-structured validation assessment. Your response should:\n\n1. Address the instruction directly.\n2. Use specific evidence or phrases from the context to support your assessment.\n3. Be evaluative, not just descriptive.\n\n---\n\nInstruction:\nReview and summarize the information on data sources, including reasonableness of accessed or excluded data.\n\n---\n\nContext:\nThe dataset includes 2,000 anonymized bankers\u2019 notes extracted from the internal CRM platform... Each note was manually labeled... by trained compliance officers.\n\n---\n\nYour Task:\nProvide a written validation assessment in 3\u20136 sentences that:\n- Responds directly to the instruction,\n- Cites or paraphrases relevant details from the context,\n- Offers a clear, professional judgment as a model validator.",
+    "response": "The data source is clearly described as internally sourced CRM notes, manually labeled by trained compliance officers. This supports both relevance and quality of the data used. The timeframe and data origin are appropriate for the use case, suggesting sound judgment in data selection and access.",
+    "evaluation": {
+      "relevancy": {
+        "score": 5,
+        "rationale": "Instruction is fully addressed using context-specific content."
+      },
+      "completeness": {
+        "score": 4,
+        "rationale": "Covers the instruction well, with minor depth or scope limitations."
+      },
+      "specificity": {
+        "score": 5,
+        "rationale": "Refers to explicit elements from the context and makes clear judgments."
+      },
+      "errors": {
+        "hallucination": {
+          "exists": false,
+          "evidence": "",
+          "severity": "low"
+        },
+        "redundancy": {
+          "exists": false,
+          "evidence": "",
+          "severity": "low"
+        },
+        "lack_of_specificity": {
+          "exists": false,
+          "evidence": "",
+          "severity": "low"
+        }
+      }
+    },
+    "generation_metadata": {
+      "temperature": 0.3,
+      "top_p": 0.95,
+      "max_tokens": 600,
+      "timestamp": "2025-04-16T19:42:27.444113"
+    }
+  },
+  {
+    "id": "004",
+    "instruction": "Review the data quality analysis performed in the MDD.",
+    "context": "No missing records were observed... Data was verified by compliance leads... All text records were processed using consistent UTF-8 encoding...",
+    "model": "gpt-4o",
+    "prompting_technique": "zero_shot",
+    "prompt": "You are a model validation expert specializing in risk, compliance, and documentation assessment.\n\nBelow is a specific instruction followed by supporting context from a model development document (MDD). Based on the instruction and the context, write a concise and well-structured validation assessment. Your response should:\n\n1. Address the instruction directly.\n2. Use specific evidence or phrases from the context to support your assessment.\n3. Be evaluative, not just descriptive.\n\n---\n\nInstruction:\nReview the data quality analysis performed in the MDD.\n\n---\n\nContext:\nNo missing records were observed... Data was verified by compliance leads... All text records were processed using consistent UTF-8 encoding...\n\n---\n\nYour Task:\nProvide a written validation assessment in 3\u20136 sentences that:\n- Responds directly to the instruction,\n- Cites or paraphrases relevant details from the context,\n- Offers a clear, professional judgment as a model validator.",
+    "response": "The MDD addresses key data quality dimensions: completeness (no missing values), accuracy (reviewed by compliance leads), and consistency (UTF-8 encoding). These checks demonstrate that the input data pipeline was robust and fit for NLP modeling tasks.",
+    "evaluation": {
+      "relevancy": {
+        "score": 5,
+        "rationale": "Instruction is fully addressed using context-specific content."
+      },
+      "completeness": {
+        "score": 4,
+        "rationale": "Covers the instruction well, with minor depth or scope limitations."
+      },
+      "specificity": {
+        "score": 5,
+        "rationale": "Refers to explicit elements from the context and makes clear judgments."
+      },
+      "errors": {
+        "hallucination": {
+          "exists": false,
+          "evidence": "",
+          "severity": "low"
+        },
+        "redundancy": {
+          "exists": false,
+          "evidence": "",
+          "severity": "low"
+        },
+        "lack_of_specificity": {
+          "exists": false,
+          "evidence": "",
+          "severity": "low"
+        }
+      }
+    },
+    "generation_metadata": {
+      "temperature": 0.3,
+      "top_p": 0.95,
+      "max_tokens": 600,
+      "timestamp": "2025-04-16T19:42:27.444121"
+    }
+  },
+  {
+    "id": "006",
+    "instruction": "Assess whether the model outputs are consistent with the model objectives and requirements.",
+    "context": "The model is developed to classify bankers' notes as EFA or Non-EFA. It uses LightGBM as a binary classifier... trained on domain expert-labeled notes.",
+    "model": "gpt-4o",
+    "prompting_technique": "zero_shot",
+    "prompt": "You are a model validation expert specializing in risk, compliance, and documentation assessment.\n\nBelow is a specific instruction followed by supporting context from a model development document (MDD). Based on the instruction and the context, write a concise and well-structured validation assessment. Your response should:\n\n1. Address the instruction directly.\n2. Use specific evidence or phrases from the context to support your assessment.\n3. Be evaluative, not just descriptive.\n\n---\n\nInstruction:\nAssess whether the model outputs are consistent with the model objectives and requirements.\n\n---\n\nContext:\nThe model is developed to classify bankers' notes as EFA or Non-EFA. It uses LightGBM as a binary classifier... trained on domain expert-labeled notes.\n\n---\n\nYour Task:\nProvide a written validation assessment in 3\u20136 sentences that:\n- Responds directly to the instruction,\n- Cites or paraphrases relevant details from the context,\n- Offers a clear, professional judgment as a model validator.",
+    "response": "The model's outputs\u2014binary labels for EFA detection\u2014are directly aligned with its stated objective to classify bankers\u2019 notes. The use of expert-labeled training data further reinforces that the model output supports operational decision-making on EFA risk.",
+    "evaluation": {
+      "relevancy": {
+        "score": 5,
+        "rationale": "Instruction is fully addressed using context-specific content."
+      },
+      "completeness": {
+        "score": 4,
+        "rationale": "Covers the instruction well, with minor depth or scope limitations."
+      },
+      "specificity": {
+        "score": 5,
+        "rationale": "Refers to explicit elements from the context and makes clear judgments."
+      },
+      "errors": {
+        "hallucination": {
+          "exists": false,
+          "evidence": "",
+          "severity": "low"
+        },
+        "redundancy": {
+          "exists": false,
+          "evidence": "",
+          "severity": "low"
+        },
+        "lack_of_specificity": {
+          "exists": false,
+          "evidence": "",
+          "severity": "low"
+        }
+      }
+    },
+    "generation_metadata": {
+      "temperature": 0.3,
+      "top_p": 0.95,
+      "max_tokens": 600,
+      "timestamp": "2025-04-16T19:42:27.444130"
+    }
+  },
+  {
+    "id": "007",
+    "instruction": "Evaluate the quality and comprehensiveness of the developer\u2019s outcome testing.",
+    "context": "Performance metrics validated using 5-fold cross-validation. LightGBM outperformed Logistic Regression and Naive Bayes baselines by 6\u20138% F1 score.",
+    "model": "gpt-4o",
+    "prompting_technique": "zero_shot",
+    "prompt": "You are a model validation expert specializing in risk, compliance, and documentation assessment.\n\nBelow is a specific instruction followed by supporting context from a model development document (MDD). Based on the instruction and the context, write a concise and well-structured validation assessment. Your response should:\n\n1. Address the instruction directly.\n2. Use specific evidence or phrases from the context to support your assessment.\n3. Be evaluative, not just descriptive.\n\n---\n\nInstruction:\nEvaluate the quality and comprehensiveness of the developer\u2019s outcome testing.\n\n---\n\nContext:\nPerformance metrics validated using 5-fold cross-validation. LightGBM outperformed Logistic Regression and Naive Bayes baselines by 6\u20138% F1 score.\n\n---\n\nYour Task:\nProvide a written validation assessment in 3\u20136 sentences that:\n- Responds directly to the instruction,\n- Cites or paraphrases relevant details from the context,\n- Offers a clear, professional judgment as a model validator.",
+    "response": "The developer has implemented 5-fold cross-validation and benchmarked against two baseline models, achieving 6\u20138% higher F1 scores. While this demonstrates performance strength, the lack of outcome-level analysis (e.g., by segment or false positive rate) leaves some room for improvement.",
+    "evaluation": {
+      "relevancy": {
+        "score": 5,
+        "rationale": "Instruction is fully addressed using context-specific content."
+      },
+      "completeness": {
+        "score": 4,
+        "rationale": "Covers the instruction well, with minor depth or scope limitations."
+      },
+      "specificity": {
+        "score": 5,
+        "rationale": "Refers to explicit elements from the context and makes clear judgments."
+      },
+      "errors": {
+        "hallucination": {
+          "exists": false,
+          "evidence": "",
+          "severity": "low"
+        },
+        "redundancy": {
+          "exists": false,
+          "evidence": "",
+          "severity": "low"
+        },
+        "lack_of_specificity": {
+          "exists": false,
+          "evidence": "",
+          "severity": "low"
+        }
+      }
+    },
+    "generation_metadata": {
+      "temperature": 0.3,
+      "top_p": 0.95,
+      "max_tokens": 600,
+      "timestamp": "2025-04-16T19:42:27.444139"
+    }
+  },
+  {
+    "id": "010",
+    "instruction": "Assess the model monitoring plans (frequency, KPIs, thresholds, etc.).",
+    "context": "Sensitivity analysis showed stable predictions with +/-10% TF-IDF variance.",
+    "model": "gpt-4o",
+    "prompting_technique": "zero_shot",
+    "prompt": "You are a model validation expert specializing in risk, compliance, and documentation assessment.\n\nBelow is a specific instruction followed by supporting context from a model development document (MDD). Based on the instruction and the context, write a concise and well-structured validation assessment. Your response should:\n\n1. Address the instruction directly.\n2. Use specific evidence or phrases from the context to support your assessment.\n3. Be evaluative, not just descriptive.\n\n---\n\nInstruction:\nAssess the model monitoring plans (frequency, KPIs, thresholds, etc.).\n\n---\n\nContext:\nSensitivity analysis showed stable predictions with +/-10% TF-IDF variance.\n\n---\n\nYour Task:\nProvide a written validation assessment in 3\u20136 sentences that:\n- Responds directly to the instruction,\n- Cites or paraphrases relevant details from the context,\n- Offers a clear, professional judgment as a model validator.",
+    "response": "The sensitivity analysis indicates basic model robustness but does not constitute a full monitoring plan. There is no mention of KPIs, thresholds, or monitoring frequency. As such, the monitoring plan is underdeveloped and needs expansion.",
+    "evaluation": {
+      "relevancy": {
+        "score": 5,
+        "rationale": "Instruction is fully addressed using context-specific content."
+      },
+      "completeness": {
+        "score": 3,
+        "rationale": "Highlights an incomplete or missing monitoring plan."
+      },
+      "specificity": {
+        "score": 4,
+        "rationale": "Specific on what is missing, but no KPI details to analyze."
+      },
+      "errors": {
+        "hallucination": {
+          "exists": false,
+          "evidence": "",
+          "severity": "low"
+        },
+        "redundancy": {
+          "exists": false,
+          "evidence": "",
+          "severity": "low"
+        },
+        "lack_of_specificity": {
+          "exists": false,
+          "evidence": "",
+          "severity": "low"
+        }
+      }
+    },
+    "generation_metadata": {
+      "temperature": 0.3,
+      "top_p": 0.95,
+      "max_tokens": 600,
+      "timestamp": "2025-04-16T19:42:27.444147"
+    }
+  }
+]

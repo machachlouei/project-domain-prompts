@@ -1,0 +1,140 @@
+[
+  {
+    "id": "001",
+    "instruction": "Review the core requirements for the overall theory, design, and selection of the modeling framework.",
+    "context": "LightGBM was selected due to its balance of interpretability and performance on tabular TF-IDF data. It provides feature importance outputs and rapid retraining.",
+    "model": "gpt-4o",
+    "prompting_technique": "few_shot_cot",
+    "prompt": "You are a model validation expert. Your task is to reason step by step to evaluate whether a model development document (MDD) meets a specific validation instruction.\n\nEach example includes:\n- An instruction\n- Supporting context from the MDD\n- Step-by-step reasoning\n- A final assessment based on the reasoning\n\nFollow the same structure for the new instruction and context provided at the end.\n\n---\n\nExample 1\n\nInstruction:\nAssess whether the model assumptions are clearly stated and validated.\n\nContext:\nAssumes independence between TF-IDF feature dimensions. Assumes the label annotations are accurate representations of ground truth.\n\nStep-by-Step Reasoning:\n1. The instruction requires clarity and validation of assumptions.\n2. The context lists two assumptions: feature independence and label accuracy.\n3. There is no mention of tests like correlation analysis or label reliability checks.\n4. Therefore, assumptions are clear but not validated with supporting analysis.\n\nFinal Assessment:\nThe MDD articulates its core assumptions well, including TF-IDF feature independence and the reliability of labeled data. However, it lacks empirical validation to support these assumptions, such as correlation testing or label audit results. This weakens the assurance of assumption robustness.\n\n---\n\nExample 2\n\nInstruction:\nReview the data quality analysis performed in the MDD.\n\nContext:\nNo missing records were observed. Data was verified by compliance leads. Text was processed using consistent UTF-8 encoding.\n\nStep-by-Step Reasoning:\n1. The instruction requires assessment of data completeness, accuracy, and consistency.\n2. The context states there were no missing records, suggesting completeness.\n3. Verification by compliance leads indicates accuracy.\n4. UTF-8 normalization ensures consistency.\n5. All key aspects of data quality are addressed.\n\nFinal Assessment:\nThe MDD demonstrates a thorough approach to data quality. It covers completeness, accuracy, and consistency through specific controls such as record validation, expert oversight, and encoding normalization. These efforts build strong trust in the input pipeline for model development.\n\n---\n\nInstruction:\nReview the core requirements for the overall theory, design, and selection of the modeling framework.\n\nContext:\nLightGBM was selected due to its balance of interpretability and performance on tabular TF-IDF data. It provides feature importance outputs and rapid retraining.\n\nStep-by-Step Reasoning:\n1.",
+    "response": "Step-by-Step Reasoning:\n1. This instruction requires evaluating whether the model's chosen framework is theoretically sound and appropriate for its design purpose.\n2. The context states that LightGBM was selected for its balance of interpretability and performance.\n3. These attributes are essential for compliance-related applications where model transparency and efficiency are valued.\n4. The inclusion of feature importance and retraining capability demonstrates attention to model usability and lifecycle management.\n\nFinal Assessment:\nThe model design and framework selection are well justified. LightGBM\u2019s interpretability, performance, and retraining capabilities align with the documented objectives. The rationale supports regulatory compliance and operational needs.",
+    "evaluation": {
+      "relevancy": {
+        "score": 5,
+        "rationale": "Directly addresses the instruction using evidence from the MDD context."
+      },
+      "completeness": {
+        "score": 5,
+        "rationale": "Covers all key elements of the instruction with stepwise reasoning and conclusion."
+      },
+      "specificity": {
+        "score": 5,
+        "rationale": "Uses explicit references to context with model-relevant judgments."
+      },
+      "errors": {
+        "hallucination": {
+          "exists": false,
+          "evidence": "",
+          "severity": "low"
+        },
+        "redundancy": {
+          "exists": false,
+          "evidence": "",
+          "severity": "low"
+        },
+        "lack_of_specificity": {
+          "exists": false,
+          "evidence": "",
+          "severity": "low"
+        }
+      }
+    },
+    "generation_metadata": {
+      "temperature": 0.3,
+      "top_p": 0.95,
+      "max_tokens": 600,
+      "timestamp": "2025-04-16T19:53:23.511232"
+    }
+  },
+  {
+    "id": "003",
+    "instruction": "Review and summarize the information on data sources, including reasonableness of accessed or excluded data.",
+    "context": "The dataset includes 2,000 anonymized bankers\u2019 notes extracted from the internal CRM platform... Each note was manually labeled... by trained compliance officers.",
+    "model": "gpt-4o",
+    "prompting_technique": "few_shot_cot",
+    "prompt": "You are a model validation expert. Your task is to reason step by step to evaluate whether a model development document (MDD) meets a specific validation instruction.\n\nEach example includes:\n- An instruction\n- Supporting context from the MDD\n- Step-by-step reasoning\n- A final assessment based on the reasoning\n\nFollow the same structure for the new instruction and context provided at the end.\n\n---\n\nExample 1\n\nInstruction:\nAssess whether the model assumptions are clearly stated and validated.\n\nContext:\nAssumes independence between TF-IDF feature dimensions. Assumes the label annotations are accurate representations of ground truth.\n\nStep-by-Step Reasoning:\n1. The instruction requires clarity and validation of assumptions.\n2. The context lists two assumptions: feature independence and label accuracy.\n3. There is no mention of tests like correlation analysis or label reliability checks.\n4. Therefore, assumptions are clear but not validated with supporting analysis.\n\nFinal Assessment:\nThe MDD articulates its core assumptions well, including TF-IDF feature independence and the reliability of labeled data. However, it lacks empirical validation to support these assumptions, such as correlation testing or label audit results. This weakens the assurance of assumption robustness.\n\n---\n\nExample 2\n\nInstruction:\nReview the data quality analysis performed in the MDD.\n\nContext:\nNo missing records were observed. Data was verified by compliance leads. Text was processed using consistent UTF-8 encoding.\n\nStep-by-Step Reasoning:\n1. The instruction requires assessment of data completeness, accuracy, and consistency.\n2. The context states there were no missing records, suggesting completeness.\n3. Verification by compliance leads indicates accuracy.\n4. UTF-8 normalization ensures consistency.\n5. All key aspects of data quality are addressed.\n\nFinal Assessment:\nThe MDD demonstrates a thorough approach to data quality. It covers completeness, accuracy, and consistency through specific controls such as record validation, expert oversight, and encoding normalization. These efforts build strong trust in the input pipeline for model development.\n\n---\n\nInstruction:\nReview and summarize the information on data sources, including reasonableness of accessed or excluded data.\n\nContext:\nThe dataset includes 2,000 anonymized bankers\u2019 notes extracted from the internal CRM platform... Each note was manually labeled... by trained compliance officers.\n\nStep-by-Step Reasoning:\n1.",
+    "response": "Step-by-Step Reasoning:\n1. This instruction involves reviewing the data source\u2019s appropriateness and the rationale for its inclusion or exclusion.\n2. The context indicates that the data comes from internal CRM systems and is annotated by trained professionals.\n3. This implies that the source is highly relevant to the task of EFA detection.\n4. The use of expert-labeled internal data enhances its credibility.\n\nFinal Assessment:\nThe MDD clearly documents the data source and validates its appropriateness for the model\u2019s purpose. Internal sourcing and expert labeling support both accuracy and contextual relevance. No major issues with data exclusion are noted.",
+    "evaluation": {
+      "relevancy": {
+        "score": 5,
+        "rationale": "Directly addresses the instruction using evidence from the MDD context."
+      },
+      "completeness": {
+        "score": 5,
+        "rationale": "Covers all key elements of the instruction with stepwise reasoning and conclusion."
+      },
+      "specificity": {
+        "score": 5,
+        "rationale": "Uses explicit references to context with model-relevant judgments."
+      },
+      "errors": {
+        "hallucination": {
+          "exists": false,
+          "evidence": "",
+          "severity": "low"
+        },
+        "redundancy": {
+          "exists": false,
+          "evidence": "",
+          "severity": "low"
+        },
+        "lack_of_specificity": {
+          "exists": false,
+          "evidence": "",
+          "severity": "low"
+        }
+      }
+    },
+    "generation_metadata": {
+      "temperature": 0.3,
+      "top_p": 0.95,
+      "max_tokens": 600,
+      "timestamp": "2025-04-16T19:53:23.511244"
+    }
+  },
+  {
+    "id": "006",
+    "instruction": "Assess whether the model outputs are consistent with the model objectives and requirements.",
+    "context": "The model is developed to classify bankers' notes as EFA or Non-EFA. It uses LightGBM as a binary classifier... trained on domain expert-labeled notes.",
+    "model": "gpt-4o",
+    "prompting_technique": "few_shot_cot",
+    "prompt": "You are a model validation expert. Your task is to reason step by step to evaluate whether a model development document (MDD) meets a specific validation instruction.\n\nEach example includes:\n- An instruction\n- Supporting context from the MDD\n- Step-by-step reasoning\n- A final assessment based on the reasoning\n\nFollow the same structure for the new instruction and context provided at the end.\n\n---\n\nExample 1\n\nInstruction:\nAssess whether the model assumptions are clearly stated and validated.\n\nContext:\nAssumes independence between TF-IDF feature dimensions. Assumes the label annotations are accurate representations of ground truth.\n\nStep-by-Step Reasoning:\n1. The instruction requires clarity and validation of assumptions.\n2. The context lists two assumptions: feature independence and label accuracy.\n3. There is no mention of tests like correlation analysis or label reliability checks.\n4. Therefore, assumptions are clear but not validated with supporting analysis.\n\nFinal Assessment:\nThe MDD articulates its core assumptions well, including TF-IDF feature independence and the reliability of labeled data. However, it lacks empirical validation to support these assumptions, such as correlation testing or label audit results. This weakens the assurance of assumption robustness.\n\n---\n\nExample 2\n\nInstruction:\nReview the data quality analysis performed in the MDD.\n\nContext:\nNo missing records were observed. Data was verified by compliance leads. Text was processed using consistent UTF-8 encoding.\n\nStep-by-Step Reasoning:\n1. The instruction requires assessment of data completeness, accuracy, and consistency.\n2. The context states there were no missing records, suggesting completeness.\n3. Verification by compliance leads indicates accuracy.\n4. UTF-8 normalization ensures consistency.\n5. All key aspects of data quality are addressed.\n\nFinal Assessment:\nThe MDD demonstrates a thorough approach to data quality. It covers completeness, accuracy, and consistency through specific controls such as record validation, expert oversight, and encoding normalization. These efforts build strong trust in the input pipeline for model development.\n\n---\n\nInstruction:\nAssess whether the model outputs are consistent with the model objectives and requirements.\n\nContext:\nThe model is developed to classify bankers' notes as EFA or Non-EFA. It uses LightGBM as a binary classifier... trained on domain expert-labeled notes.\n\nStep-by-Step Reasoning:\n1.",
+    "response": "Step-by-Step Reasoning:\n1. The instruction asks whether the model output matches its intended purpose.\n2. The context explains that the model classifies notes into EFA or Non-EFA, matching the objective.\n3. It also confirms that the training data was prepared by domain experts, ensuring quality.\n4. This supports both alignment and compliance with expected outcomes.\n\nFinal Assessment:\nThe model outputs align directly with its objective of EFA classification. The binary structure and use of expert-labeled training data confirm consistency with operational and regulatory expectations.",
+    "evaluation": {
+      "relevancy": {
+        "score": 5,
+        "rationale": "Directly addresses the instruction using evidence from the MDD context."
+      },
+      "completeness": {
+        "score": 5,
+        "rationale": "Covers all key elements of the instruction with stepwise reasoning and conclusion."
+      },
+      "specificity": {
+        "score": 5,
+        "rationale": "Uses explicit references to context with model-relevant judgments."
+      },
+      "errors": {
+        "hallucination": {
+          "exists": false,
+          "evidence": "",
+          "severity": "low"
+        },
+        "redundancy": {
+          "exists": false,
+          "evidence": "",
+          "severity": "low"
+        },
+        "lack_of_specificity": {
+          "exists": false,
+          "evidence": "",
+          "severity": "low"
+        }
+      }
+    },
+    "generation_metadata": {
+      "temperature": 0.3,
+      "top_p": 0.95,
+      "max_tokens": 600,
+      "timestamp": "2025-04-16T19:53:23.511251"
+    }
+  }
+]
