@@ -21,8 +21,8 @@
   },
   {
     "id": "005",
-    "instruction": "Check for consistency between change logs and MoRS regarding upstream models.",
-    "context": "No mention of model change logs, MoRS systems, or upstream model dependencies."
+    "instruction": "Check for consistency between change logs and model metadata systems regarding upstream models.",
+    "context": "No mention of model change logs, model metadata systems, or upstream model dependencies."
   },
   {
     "id": "006",
