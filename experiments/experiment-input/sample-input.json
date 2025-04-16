@@ -1,1 +1,52 @@
-[{"id": "001", "instruction": "Assess whether core model requirements align with model objectives.", "context": "The model is designed to detect risk segments using logistic regression trained on internal behavioral data..."}]
+[
+  {
+    "id": "001",
+    "instruction": "Review the core requirements for the overall theory, design, and selection of the modeling framework.",
+    "context": "LightGBM was selected due to its balance of interpretability and performance on tabular TF-IDF data. It provides feature importance outputs and rapid retraining."
+  },
+  {
+    "id": "002",
+    "instruction": "Assess whether the model assumptions are clearly stated and validated.",
+    "context": "Assumes independence between TF-IDF feature dimensions. Assumes the label annotations are accurate representations of ground truth."
+  },
+  {
+    "id": "003",
+    "instruction": "Review and summarize the information on data sources, including reasonableness of accessed or excluded data.",
+    "context": "The dataset includes 2,000 anonymized bankers’ notes extracted from the internal CRM platform... Each note was manually labeled... by trained compliance officers."
+  },
+  {
+    "id": "004",
+    "instruction": "Review the data quality analysis performed in the MDD.",
+    "context": "No missing records were observed... Data was verified by compliance leads... All text records were processed using consistent UTF-8 encoding..."
+  },
+  {
+    "id": "005",
+    "instruction": "Check for consistency between change logs and MoRS regarding upstream models.",
+    "context": "No mention of model change logs, MoRS systems, or upstream model dependencies."
+  },
+  {
+    "id": "006",
+    "instruction": "Assess whether the model outputs are consistent with the model objectives and requirements.",
+    "context": "The model is developed to classify bankers' notes as EFA or Non-EFA. It uses LightGBM as a binary classifier... trained on domain expert-labeled notes."
+  },
+  {
+    "id": "007",
+    "instruction": "Evaluate the quality and comprehensiveness of the developer’s outcome testing.",
+    "context": "Performance metrics validated using 5-fold cross-validation. LightGBM outperformed Logistic Regression and Naive Bayes baselines by 6–8% F1 score."
+  },
+  {
+    "id": "008",
+    "instruction": "Assess the adequacy of model implementation specifications and test plan.",
+    "context": "No mention of implementation specifications, system test plans, or production deployment details."
+  },
+  {
+    "id": "009",
+    "instruction": "Provide an assessment of model-level control activities documented in the MDD.",
+    "context": "No explicit mention of model-level controls, governance, or risk mitigation mechanisms outside of preprocessing checks."
+  },
+  {
+    "id": "010",
+    "instruction": "Assess the model monitoring plans (frequency, KPIs, thresholds, etc.).",
+    "context": "Sensitivity analysis showed stable predictions with +/-10% TF-IDF variance."
+  }
+]
