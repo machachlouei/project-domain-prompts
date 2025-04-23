@@ -1052,6 +1052,189 @@ print(df[["Prompt", "Response", "Similarity", "RoD"]])
 	•	Rate of Degradation (RoD): how much worse the perturbed response is.
 	•	Full insight into prompt robustness using GPT-4o.
 
+==============
+==============
+==============
+
+Reinforcement learning for aligning, large language, models agents with interactive : Quantifying and Mitigating Prompt Overfitting
+
+The paper titled “Reinforcement Learning for Aligning Large Language Model Agents with Interactive Environments: Quantifying and Mitigating Prompt Overfitting” by Mohamed Salim Aissi et al. (2024) investigates the challenges of aligning Large Language Models (LLMs) with interactive environments using Reinforcement Learning (RL), focusing on the issue of prompt overfitting. ￼
+
+⸻
+
+🔍 Key Contributions
+	1.	Prompt Overfitting in RL-Fine-Tuned LLMs: The study reveals that LLMs fine-tuned with RL in specific environments tend to overfit to the prompt formulations encountered during training. This overfitting leads to performance degradation when the models are exposed to semantically equivalent but syntactically different prompts.  ￼
+	2.	Analysis of Internal Representations: The authors analyze the internal representations and salient tokens of the RL-fine-tuned LLMs to understand the source of this sensitivity. They find that the models become overly reliant on specific prompt structures, which hampers their ability to generalize to varied prompt formulations.  ￼
+	3.	Contrastive Loss for Mitigation: To address prompt overfitting, the paper proposes incorporating a contrastive loss during training. This approach encourages the model to produce similar internal representations for semantically similar prompts, thereby enhancing robustness and generalization capabilities.  ￼
+
+⸻
+
+🧪 Experimental Setup
+	•	Environment: The experiments are conducted in a textual interactive environment where LLM agents receive prompts describing the state and possible actions. ￼
+	•	Evaluation: The performance of the RL-fine-tuned LLMs is evaluated on both seen and unseen prompt formulations to assess generalization. The study demonstrates that models trained with contrastive loss exhibit improved robustness to prompt variations.  ￼
+
+⸻
+
+📌 Implications
+
+This research highlights the importance of addressing prompt overfitting in RL-fine-tuned LLMs, especially for applications requiring interaction with diverse user inputs. By introducing contrastive loss during training, the study offers a viable solution to enhance the adaptability and reliability of LLM agents in dynamic environments.
+
+
+##########
+##########
+
+Yes, the authors of the paper “Reinforcement Learning for Aligning Large Language Model Agents with Interactive Environments: Quantifying and Mitigating Prompt Overfitting” have released their code on GitHub. The repository is named Quantifying-and-Mitigating-Prompt-Overfitting and is available at: ￼
+
+🔗 https://github.com/Emnlp2024/Quantifying-and-Mitigating-Prompt-Overfitting
+
+📦 Repository Overview
+
+This repository contains the code used for the experiments presented in the paper. It includes implementations for:
+	•	Reinforcement Learning (RL) fine-tuning of Large Language Models (LLMs) in interactive environments.
+	•	Analysis of prompt overfitting phenomena.
+	•	Mitigation strategies using contrastive loss. ￼ ￼
+
+🛠️ Installation Instructions
+
+To set up the environment and run the experiments, follow these steps:
+	1.	Create a Python Environment:
+
+conda create -n PRV python=3.10.8
+conda activate PRV
+
+
+	2.	Install Required Packages:
+
+pip install -r requirements.txt
+
+
+	3.	Install Simulation Environments:
+	•	BabyAI-Text:
+
+pip install blosc
+cd babyai-text/babyai
+pip install -e .
+cd ../..
+cd gym-minigrid
+pip install -e .
+cd ..
+pip install -e .
+
+
+	•	TextWorld Commonsense (TWC):
+
+pip install textworld
+git clone https://github.com/IBM/commonsense-rl
+cd commonsense-rl/game_generation
+# Create TWC Levels
+python twc_make_game.py --level medium --num_games 10000
+
+Alternatively, you can download pre-generated games from the provided link in the repository.
+
+📄 Additional Information
+
+The repository includes detailed instructions and scripts to reproduce the experiments from the paper. It leverages environments like BabyAI-Text and TextWorld Commonsense to evaluate the performance of RL-fine-tuned LLMs under various prompt formulations. ￼
+
+By following the setup instructions, you can experiment with the code to study prompt overfitting and test mitigation strategies as described in the paper.
+
+
+Here is a step-by-step breakdown and a simplified Python example (for educational purposes) that demonstrates prompt overfitting detection and mitigation using techniques inspired by the paper “Quantifying and Mitigating Prompt Overfitting”. This simulation assumes you’re using LLaMA 3.2 3B (or any Hugging Face causal LLM).
+
+⸻
+
+✅ What This Example Does:
+	•	Compares two semantically equivalent prompts for a model validation instruction.
+	•	Uses sentence embeddings to measure semantic shift between outputs.
+	•	Computes a Prompt Sensitivity Score (PSS) to quantify prompt overfitting.
+	•	Suggests how to train with contrastive loss (conceptually) to reduce the gap.
+
+⸻
+
+🔧 Prerequisites
+
+pip install transformers sentence-transformers
+
+
+
+⸻
+
+✅ Python Code (Simplified Demonstration)
+
+from transformers import AutoTokenizer, AutoModelForCausalLM
+from sentence_transformers import SentenceTransformer, util
+import torch
+
+# Load the Hugging Face model (e.g., LLaMA 3.2 3B)
+model_id = "meta-llama/Meta-Llama-3-3B"
+tokenizer = AutoTokenizer.from_pretrained(model_id)
+model = AutoModelForCausalLM.from_pretrained(model_id)
+model.eval()
+
+# Sentence embedding model for semantic similarity
+embedder = SentenceTransformer("all-MiniLM-L6-v2")
+
+# Define two semantically similar prompts
+prompt_1 = "Assess whether the model outputs match the stated objectives."
+prompt_2 = "Evaluate if the model's results are aligned with its intended goals."
+
+# Shared context (simulating an MDD excerpt)
+context = "The model is designed to classify banking notes into EFA or non-EFA based on textual features using LightGBM."
+
+# Combine prompt + context
+def generate_output(prompt, context):
+    full_input = prompt + "\n\n" + context
+    inputs = tokenizer(full_input, return_tensors="pt")
+    with torch.no_grad():
+        outputs = model.generate(**inputs, max_length=150)
+    return tokenizer.decode(outputs[0], skip_special_tokens=True)
+
+# Get responses
+response_1 = generate_output(prompt_1, context)
+response_2 = generate_output(prompt_2, context)
+
+# Compute semantic similarity between the two responses
+embedding_1 = embedder.encode(response_1, convert_to_tensor=True)
+embedding_2 = embedder.encode(response_2, convert_to_tensor=True)
+similarity = util.cos_sim(embedding_1, embedding_2).item()
+
+# Compute Prompt Sensitivity Score (PSS)
+PSS = 1 - similarity
+
+# Display results
+print("Prompt 1:", prompt_1)
+print("Prompt 2:", prompt_2)
+print("\nResponse 1:", response_1)
+print("\nResponse 2:", response_2)
+print(f"\nSemantic Similarity: {similarity:.4f}")
+print(f"Prompt Sensitivity Score (PSS): {PSS:.4f}  --> Lower is better (less overfitting)")
+
+
+
+⸻
+
+🔍 Interpretation
+	•	Low PSS (~0.0): Model treats both prompts similarly → Generalized reasoning.
+	•	High PSS (~0.2+): Model generates significantly different responses → Potential overfitting to prompt structure.
+
+⸻
+
+🧪 How to Mitigate Prompt Overfitting
+
+If you observe high PSS across many equivalent prompts:
+	•	Fine-tune with contrastive loss:
+
+Encourage similar representations for semantically similar prompts.
+
+
+	•	Inject more paraphrased prompts during training.
+	•	Use adversarial paraphrasing to regularize attention over prompts.
+
+⸻
+
+
+
+
+
 
 
 
