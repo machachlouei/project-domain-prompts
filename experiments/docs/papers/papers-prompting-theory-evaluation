@@ -715,6 +715,126 @@ for k, v in metrics.items():
 
 ⸻
 
+PortKey
+
+The Portkey AI blog post titled “Evaluating Prompt Effectiveness: Key Metrics and Tools” (November 2024) provides a comprehensive framework for assessing and improving the quality of prompts used with Large Language Models (LLMs). It emphasizes the importance of systematic evaluation to enhance model performance and user satisfaction. ￼
+
+⸻
+
+🔑 Key Metrics for Prompt Evaluation
+	1.	Relevance: Assesses how well the model’s output aligns with the user’s original intent. Techniques include semantic similarity measures, such as cosine similarity between embeddings. ￼
+	2.	Accuracy: Evaluates the factual correctness of the output, particularly crucial in domains like healthcare or law. Common metrics include BLEU, ROUGE, and F1 scores.
+	3.	Consistency: Measures the reproducibility of outputs when the same prompt is used multiple times. High consistency indicates reliable prompt performance.
+	4.	Efficiency: Analyzes the computational resources and time required to generate responses, important for real-time applications. Metrics include response time and resource utilization.
+	5.	Readability & Coherence: Assesses the clarity and logical flow of the output. Tools like the Flesch-Kincaid readability test can be employed for this purpose. ￼
+	6.	User Satisfaction Score: Gathers user feedback to determine satisfaction levels with the model’s responses, often through surveys or rating systems. ￼
+
+⸻
+
+By systematically applying these metrics and utilizing the mentioned tools, teams can refine their prompts to achieve more accurate, consistent, and efficient interactions with LLMs, ultimately leading to improved user experiences and optimized model performance. 
+
+Yes, Portkey provides a Python SDK that integrates seamlessly with OpenAI’s GPT-4o API, enabling you to evaluate prompts and responses using various metrics. Here’s how you can set it up and utilize some of its capabilities:
+
+⸻
+
+🔧 Setup Instructions
+	1.	Install the Portkey SDK:
+
+pip install portkey-ai
+
+
+	2.	Obtain API Keys:
+	•	Sign up at Portkey to get your PORTKEY_API_KEY.
+	•	Add your OpenAI API key to Portkey’s Virtual Keys to obtain a VIRTUAL_KEY. ￼
+	3.	Initialize the Portkey Client:
+
+from portkey_ai import Portkey
+
+portkey = Portkey(
+    api_key="PORTKEY_API_KEY",       # Replace with your Portkey API key
+    virtual_key="VIRTUAL_KEY"        # Replace with your Portkey virtual key for OpenAI
+)
+
+
+
+⸻
+
+📊 Evaluating Prompts and Responses
+
+Portkey captures over 40 production-critical metrics for each request. Here’s how you can make a request and access some of these metrics: ￼
+
+from portkey_ai import Portkey
+
+# Initialize Portkey client
+portkey = Portkey(
+    api_key="PORTKEY_API_KEY",       # Replace with your Portkey API key
+    virtual_key="VIRTUAL_KEY"        # Replace with your Portkey virtual key for OpenAI
+)
+
+# Define the prompt
+messages = [
+    {"role": "system", "content": "You are a helpful assistant."},
+    {"role": "user", "content": "Explain the theory of relativity in simple terms."}
+]
+
+# Make a chat completion request
+response = portkey.chat.completions.create(
+    model="gpt-4o",
+    messages=messages
+)
+
+# Access the generated response
+generated_text = response.choices[0].message['content']
+print("Generated Response:", generated_text)
+
+# Access metrics
+metrics = response.usage  # Contains 'prompt_tokens', 'completion_tokens', 'total_tokens'
+print("Metrics:", metrics)
+
+The response.usage object provides token usage metrics, which are essential for cost estimation and understanding the verbosity of responses.
+
+⸻
+
+📈 Additional Metrics and Observability
+
+While the SDK provides basic metrics like token usage, Portkey’s platform offers a comprehensive observability dashboard where you can monitor: ￼
+	•	Latency: Time taken for each request.
+	•	Cost: Estimated cost per request.
+	•	Error Rates: Monitor failed requests.
+	•	Custom Metadata: Tag and filter requests for better analysis.
+
+These features are accessible through the Portkey Dashboard, where you can gain deeper insights into your application’s performance and behavior. ￼
+
+⸻
+
+🧪 Using Prompt Templates
+
+Portkey allows you to create and manage prompt templates, facilitating consistent and reusable prompts. Here’s how you can use a prompt template: ￼
+
+# Define variables for the prompt template
+variables = {
+    "topic": "quantum mechanics"
+}
+
+# Use a prompt template by its ID
+prompt_completion = portkey.prompts.completions.create(
+    promptID="YOUR_PROMPT_ID",  # Replace with your actual prompt ID
+    variables=variables
+)
+
+# Access the generated response
+generated_text = prompt_completion.choices[0].message['content']
+print("Generated Response from Template:", generated_text)
+
+This approach promotes prompt consistency and simplifies prompt management across different use cases.
+
+⸻
+
+📚 Further Resources
+	•	Portkey Documentation: https://portkey.ai/docs/
+	•	Portkey GitHub Repository: https://github.com/Portkey-AI/portkey-python-sdk ￼
+
+By integrating Portkey into your workflow, you can enhance the reliability, observability, and manageability of your interactions with OpenAI’s GPT-4o API.
 
 
 
