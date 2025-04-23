@@ -9,3 +9,102 @@
 5. Principled Instructions Are All You Need for Questioning LLaMA-1/2, GPT-3.5/4
 
 6. Galileo Al. A Metrics-First Approach to LLM Evaluation, 2023
+
+
+To support your goal of deepening prompt engineering and evaluation strategies—particularly to understand why and when advanced techniques like ReAct or Tree of Thought (ToT) work—each of the following resources contributes unique perspectives or tools. Here’s how they can inform your research:
+
+⸻
+
+1. Prompt Effectiveness: Key Metrics and Tools
+
+Portkey AI Blog, 2024
+
+How it helps:
+	•	Offers a consolidated framework of evaluation metrics for prompting (e.g., coherence, coverage, helpfulness).
+	•	Suggests tooling and automation for prompt experimentation (e.g., Portkey’s playground + dashboards).
+	•	Useful for benchmarking ReAct and ToT using consistent metrics beyond traditional NLP scores.
+
+Key Insight:
+Introduces practical metrics (like traceability of reasoning or user trust scores) that align with ReAct/ToT’s goals.
+
+⸻
+
+2. Log Probability as a Detection Method
+
+EACL 2023
+
+How it helps:
+	•	Proposes using token-level log probabilities to detect hallucinations or unstable model behavior.
+	•	Can be applied to compare ReAct vs. standard prompting in terms of confidence or internal consistency.
+	•	Potential for detecting over-assertion in hallucinated ReAct chains.
+
+Key Insight:
+Use log-probs to quantify hallucination risk or brittleness in complex reasoning prompts.
+
+⸻
+
+3. Prompt Perturbation and Robustness Evaluation
+
+(Talk, 2023 – Slides)
+
+How it helps:
+	•	Encourages evaluating how stable prompting techniques are to slight rewording or paraphrasing.
+	•	Apply this to test whether ToT or ReAct prompts degrade under perturbation, which would reflect fragility in logic chaining.
+	•	Useful for systematically stress-testing templates.
+
+Key Insight:
+Test robustness and generalization of structured prompting strategies via perturbation experiments.
+
+⸻
+
+4. Quantifying and Mitigating Prompt Overfitting
+
+How it helps:
+	•	Introduces the concept of overfitting to prompt examples, particularly in few-shot and chain-of-thought settings.
+	•	Helps distinguish between true reasoning gains and superficial mimicry.
+	•	Apply to ensure ReAct responses aren’t memorized templates but reflect adaptive logic.
+
+Key Insight:
+Design prompts that minimize leakage and encourage true task generalization—not just memorized flows.
+
+⸻
+
+5. Principled Instructions Are All You Need
+
+(For LLaMA, GPT-3.5/4)
+
+How it helps:
+	•	Shows how clear, constraint-driven instructions can outperform examples or CoT in some tasks.
+	•	A counterpoint to complex prompting—suggests that well-structured zero-shot ReAct may suffice in some cases.
+	•	Useful to contrast when minimal vs. maximal prompting is ideal.
+
+Key Insight:
+Evaluate whether ToT or ReAct is necessary—or if precise, clean instruction phrasing achieves similar gains.
+
+⸻
+
+6. Galileo AI: A Metrics-First Approach to LLM Evaluation
+
+How it helps:
+	•	Focuses on real-time diagnostic feedback, using metrics like toxicity, repetition, hallucination, and specificity.
+	•	Provides dashboards and tooling for batch prompt analysis.
+	•	Aligns well with your research goal of making ReAct/ToT evaluation more quantitative and automated.
+
+Key Insight:
+Adapt Galileo-style scoring and tracking for systematic prompt variant evaluation (e.g., per-step ReAct scoring).
+
+⸻
+
+🔚 Conclusion:
+
+Each paper adds a complementary piece:
+	•	Portkey + Galileo: For infrastructure and metrics.
+	•	Log-probs + Perturbation: For robustness and failure analysis.
+	•	Overfitting + Principled Instructions: For theory and constraints.
+
+Together, they give you a robust framework to:
+	•	Evaluate why prompting techniques work (or don’t).
+	•	Compare them quantitatively and qualitatively.
+	•	Optimize prompt design for robustness and clarity.
+
+
