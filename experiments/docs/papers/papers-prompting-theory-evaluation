@@ -623,4 +623,98 @@ What You’ll See:
 	•	Red = hallucinated/low-confidence (Response B)
 	•	Clear comparison of how each model scored the same prompt+response pair
 
+===========================
+===========================
+===========================
+
+Galileo Al. A Metrics-First Approach to LLM Evaluation, 2023
+
+The article “A Metrics-First Approach to LLM Evaluation” by Galileo AI outlines a comprehensive framework for assessing Large Language Models (LLMs) using a variety of metrics. This approach emphasizes the importance of quantitative evaluation to ensure the reliability and effectiveness of LLMs in various applications.
+
+Key Evaluation Metrics:
+	1.	Context Adherence: Measures how well the model’s response aligns with the provided context, ensuring factual accuracy and minimizing hallucinations.
+	2.	Correctness: Assesses the factual accuracy of the model’s output, identifying errors of precision. ￼
+	3.	LLM Uncertainty: Utilizes log probability to detect low-quality generations, with higher uncertainty indicating potential inaccuracies. ￼
+	4.	Prompt Perplexity: Evaluates the model’s understanding of the input prompt, where lower perplexity suggests better comprehension.
+	5.	Context Relevance: In Retrieval-Augmented Generation (RAG) systems, this metric assesses the relevance of retrieved documents to the user’s query.
+	6.	Completeness: Determines whether the model’s response fully addresses all relevant information from the context. ￼
+	7.	Chunk Attribution: Analyzes which parts of the retrieved context contributed to the model’s response, aiding in understanding and improving RAG systems.
+	8.	Chunk Utilization: Measures how effectively the model uses the retrieved context in generating its response. ￼
+	9.	Safety Metrics: Evaluates the presence of sensitive information, toxic content, and other safety concerns in the model’s output. ￼
+	10.	Custom Evaluation Metrics: Allows for the development of tailored metrics to address specific use cases and requirements.
+
+Galileo’s approach underscores the necessity of integrating these metrics into the development and deployment of LLMs to enhance their reliability and trustworthiness. By systematically evaluating models across these dimensions, organizations can better understand model behavior, identify areas for improvement, and ensure that LLM applications meet desired standards of performance and safety.
+
+For a more detailed exploration of these metrics and their applications, you can refer to the full article here: A Metrics-First Approach to LLM Evaluation.
+
+Galileo AI’s metrics like context adherence, correctness, LLM uncertainty (log probability), and completeness are not yet available as a public Python package. However, we can simulate a basic implementation of these metrics using the OpenAI API and common evaluation logic:
+
+⸻
+
+✅ Python Code: Simulate Galileo-Style Metrics for GPT-4o
+
+# Install OpenAI SDK if needed
+# pip install openai
+
+import openai
+import os
+
+openai.api_key = os.getenv("OPENAI_API_KEY")  # or replace with your key
+
+# Inputs
+instruction = "Summarize the main function of mitochondria."
+context = "Mitochondria are known as the powerhouse of the cell. They generate ATP through cellular respiration."
+response = "Mitochondria generate ATP, the energy currency of the cell, through cellular respiration."
+
+# 1. Context Adherence (Simulated via keyword overlap)
+def context_adherence(response, context):
+    return len(set(response.lower().split()) & set(context.lower().split())) / len(set(response.lower().split()))
+
+# 2. LLM Uncertainty (Log prob via OpenAI API)
+def log_prob_gpt4o(prompt, response):
+    full_prompt = prompt + "\n" + response
+    result = openai.Completion.create(
+        model="gpt-4o",
+        prompt=full_prompt,
+        max_tokens=0,
+        temperature=0,
+        logprobs=1,
+        echo=True
+    )
+    token_logprobs = result['choices'][0]['logprobs']['token_logprobs']
+    response_logprobs = token_logprobs[-len(response.split()):]
+    avg_log_prob = sum(lp for lp in response_logprobs if lp is not None) / len(response_logprobs)
+    return avg_log_prob
+
+# 3. Completeness (Simulated: Did the response touch all key concepts?)
+expected_keywords = ["ATP", "energy", "cell", "respiration"]
+def completeness(response):
+    matched = [kw for kw in expected_keywords if kw.lower() in response.lower()]
+    return len(matched) / len(expected_keywords)
+
+# Run evaluations
+metrics = {
+    "context_adherence": context_adherence(response, context),
+    "completeness": completeness(response),
+    # Uncomment below after inserting OpenAI key
+    # "log_prob_gpt4o": log_prob_gpt4o(instruction + "\n" + context, response)
+}
+
+# Display results
+for k, v in metrics.items():
+    print(f"{k}: {v:.2f}")
+
+
+
+⸻
+
+📊 What It Evaluates:
+	•	Context Adherence: How many words in the response match the source context.
+	•	Completeness: Did it hit all important expected ideas.
+	•	LLM Uncertainty: Uses log probability from GPT-4o to see how confident the model was (lower = more confident).
+
+⸻
+
+
+
 
