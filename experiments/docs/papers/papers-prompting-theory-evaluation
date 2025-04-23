@@ -836,5 +836,222 @@ This approach promotes prompt consistency and simplifies prompt management acros
 
 By integrating Portkey into your workflow, you can enhance the reliability, observability, and manageability of your interactions with OpenAI’s GPT-4o API.
 
+===========
+===========
+===========
+
+Prompt Perturbation and Robustness Evaluation framework, and Python code to help you apply it using the GPT-4o API.
+
+⸻
+
+✅ Summary: Prompt Perturbation and Robustness Evaluation (Shuyue Jia, BU)
+
+1. Prompt Perturbation Defined
+
+Prompt perturbation is the process of intentionally modifying a prompt to:
+	•	Evaluate the robustness of an LLM,
+	•	Detect sensitivity to small or semantically equivalent changes.
+
+2. Types of Perturbations (Grouped by Granularity)
+
+A. Character-Level Perturbations
+	•	Character Replacement (CR)
+	•	Character Insertion (CI)
+	•	Character Deletion (CD)
+	•	Character Swap (CS)
+	•	Keyboard Typos
+	•	OCR Errors
+	•	Special Symbol Insertion/Removal
+
+B. Word-Level Perturbations
+	•	Synonym Replacement (SR)
+	•	Word Insertion
+	•	Word Swap
+	•	Word Deletion
+	•	Insert Punctuation
+
+C. Sentence-Level
+	•	Paraphrasing
+	•	Style Transfer (Formal, Casual, Passive, Active)
+
+D. Adversarial-Level
+	•	Universal Adversarial Triggers: Input-agnostic tokens that cause misbehavior
+
+⸻
+
+3. Evaluation Metric
+
+Rate of Degradation (RoD):
+\text{RoD} = \frac{\text{avg accuracy}{\text{original}} - \text{avg accuracy}{\text{perturbed}}}{\text{avg accuracy}_{\text{original}}}
+Used to assess how performance drops under perturbation.
+
+⸻
+
+🧪 Python Code to Evaluate Prompt Robustness with GPT-4o
+
+import openai
+import random
+import difflib
+
+openai.api_key = "YOUR_OPENAI_KEY"
+
+# Original and perturbed prompts
+original_prompt = "Summarize the main function of mitochondria."
+perturbed_prompts = [
+    "Summarise the principal role of mitochondria.",
+    "Explain the mitochondria's function simply.",
+    "What does a mitochondrion do?",
+    "Tell me what mitochondria mainly do.",
+    "Can you describe the function of mitochondria?"
+]
+
+def call_gpt(prompt):
+    completion = openai.ChatCompletion.create(
+        model="gpt-4o",
+        messages=[{"role": "user", "content": prompt}],
+        temperature=0,
+        max_tokens=100
+    )
+    return completion.choices[0].message["content"]
+
+# Baseline response
+original_response = call_gpt(original_prompt)
+
+# Responses to perturbed prompts
+perturbed_responses = [call_gpt(p) for p in perturbed_prompts]
+
+# Similarity comparison (using simple string similarity for demo)
+def similarity(a, b):
+    return difflib.SequenceMatcher(None, a, b).ratio()
+
+baseline_sim = [similarity(original_response, r) for r in perturbed_responses]
+avg_similarity = sum(baseline_sim) / len(baseline_sim)
+
+print("Original Response:", original_response)
+print("\nPerturbed Response Similarities:")
+for i, sim in enumerate(baseline_sim):
+    print(f"{i+1}: Similarity = {sim:.3f}")
+
+print(f"\nAverage Similarity to Original: {avg_similarity:.3f}")
+print(f"Rate of Degradation (RoD proxy) = {1 - avg_similarity:.3f}")
+
+
+
+⸻
+
+🧠 What This Does:
+	•	Perturbs the prompt semantically.
+	•	Compares each perturbed response to the original using string similarity.
+	•	Estimates a proxy for RoD (lower similarity = more fragile model).
+
+⸻
+
+
+Here’s a full-featured Python script you can use locally or in Colab to:
+	1.	Apply various prompt perturbations.
+	2.	Use GPT-4o (via OpenAI API) to generate responses.
+	3.	Compute semantic similarity (using embeddings).
+	4.	Calculate Rate of Degradation (RoD).
+
+⸻
+
+✅ Full Pipeline: Prompt Perturbation + Semantic Evaluation
+
+# Install these packages if not already installed
+# pip install openai sentence-transformers
+
+import openai
+import random
+from sentence_transformers import SentenceTransformer, util
+import pandas as pd
+
+openai.api_key = "YOUR_OPENAI_KEY"  # Replace with your OpenAI key
+
+# Load embedding model
+embedder = SentenceTransformer('all-MiniLM-L6-v2')
+
+# Original prompt
+original_prompt = "Summarize the main function of mitochondria."
+
+# Define perturbation functions
+def char_swap(text):  # character-level swap
+    chars = list(text)
+    for i in range(1, len(chars) - 1, 10):
+        chars[i], chars[i + 1] = chars[i + 1], chars[i]
+    return ''.join(chars)
+
+def insert_word(text):  # insert a filler word
+    words = text.split()
+    idx = random.randint(0, len(words))
+    words.insert(idx, "indeed")
+    return " ".join(words)
+
+def delete_word(text):  # randomly drop one word
+    words = text.split()
+    if len(words) > 1:
+        del words[random.randint(0, len(words) - 1)]
+    return " ".join(words)
+
+def paraphrase_prompt():
+    return "What role do mitochondria play in a cell?"
+
+# Perturbations
+perturbations = {
+    "Original": original_prompt,
+    "Character Swap": char_swap(original_prompt),
+    "Word Insertion": insert_word(original_prompt),
+    "Word Deletion": delete_word(original_prompt),
+    "Paraphrased Prompt": paraphrase_prompt()
+}
+
+# Call GPT-4o
+def call_gpt(prompt):
+    res = openai.ChatCompletion.create(
+        model="gpt-4o",
+        messages=[{"role": "user", "content": prompt}],
+        temperature=0,
+        max_tokens=100
+    )
+    return res.choices[0].message["content"]
+
+# Generate responses
+responses = {}
+for label, perturbed in perturbations.items():
+    responses[label] = {
+        "Prompt": perturbed,
+        "Response": call_gpt(perturbed)
+    }
+
+# Compute semantic similarity using embeddings
+original_embedding = embedder.encode(responses["Original"]["Response"], convert_to_tensor=True)
+
+for label, info in responses.items():
+    emb = embedder.encode(info["Response"], convert_to_tensor=True)
+    sim_score = util.cos_sim(original_embedding, emb).item()
+    responses[label]["Similarity"] = round(sim_score, 3)
+
+# Compute Rate of Degradation (RoD)
+baseline_sim = responses["Original"]["Similarity"]
+for label, info in responses.items():
+    if label != "Original":
+        rod = (baseline_sim - info["Similarity"]) / baseline_sim
+        responses[label]["RoD"] = round(rod, 3)
+    else:
+        responses[label]["RoD"] = 0.0
+
+# Convert to DataFrame and show
+df = pd.DataFrame.from_dict(responses, orient="index")
+print(df[["Prompt", "Response", "Similarity", "RoD"]])
+
+
+
+⸻
+
+📊 What You Get:
+	•	Semantic Similarity between original and perturbed responses.
+	•	Rate of Degradation (RoD): how much worse the perturbed response is.
+	•	Full insight into prompt robustness using GPT-4o.
+
+
 
 
