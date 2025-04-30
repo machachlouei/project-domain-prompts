@@ -66,6 +66,69 @@ Where X is a number from 1 (very poor) to 5 (excellent).
                 continue
     return 0.0, {"Relevancy": 0, "Completeness": 0, "Specificity": 0}
 
+#another version of evaluate-context-quality
+def evaluate_context_quality(context, validation_instruction, max_retries=2):
+    evaluation_prompt = f"""
+Evaluate the following retrieved context in relation to the validation instruction using three criteria:
+
+1. Relevancy – How directly does the context address the instruction?
+2. Completeness – Are all required elements present to answer the instruction fully?
+3. Specificity – Does the context cite specific items (terms, metrics, definitions) from the document?
+
+Validation Instruction:
+"{validation_instruction}"
+
+Retrieved Context:
+"{context}"
+
+Return your scores and justifications as a valid JSON object using this format:
+{{
+  "Relevancy": {{"score": X, "justification": "..." }},
+  "Completeness": {{"score": X, "justification": "..." }},
+  "Specificity": {{"score": X, "justification": "..." }}
+}}
+
+Where X is a number from 1 (very poor) to 5 (excellent).
+"""
+
+    for attempt in range(max_retries):
+        response = call_llm(evaluation_prompt, temperature=0.3)
+
+        # Try parsing as proper JSON with justification
+        try:
+            result = json.loads(response.strip())
+            scores = {k: v["score"] for k, v in result.items()}
+            avg_score = sum(scores.values()) / 3
+            return avg_score, result
+        except Exception:
+            pass
+
+        # Fallback regex-based score and justification extraction
+        try:
+            def extract_metric(name):
+                score_match = re.search(fr'{name}\s*[:=]\s*(\d)', response, re.IGNORECASE)
+                justification_match = re.search(fr'{name}.*?(?:score\s*[:=]\s*\d[^\n]*[\n]*)?(.*?)(?=\n\S|\Z)', response, re.IGNORECASE | re.DOTALL)
+                score = int(score_match.group(1)) if score_match else 0
+                justification = justification_match.group(1).strip() if justification_match else "No justification found."
+                return {"score": score, "justification": justification}
+
+            fallback_result = {
+                "Relevancy": extract_metric("Relevancy"),
+                "Completeness": extract_metric("Completeness"),
+                "Specificity": extract_metric("Specificity")
+            }
+            avg_score = sum([v["score"] for v in fallback_result.values()]) / 3
+            return avg_score, fallback_result
+        except:
+            continue
+
+    # If all attempts fail
+    return 0.0, {
+        "Relevancy": {"score": 0, "justification": "N/A"},
+        "Completeness": {"score": 0, "justification": "N/A"},
+        "Specificity": {"score": 0, "justification": "N/A"}
+    }
+    
 def run_react(validation_instruction, document_text):
     reasoning_steps = []
     context = ""
