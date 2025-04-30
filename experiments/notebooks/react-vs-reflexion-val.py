@@ -122,6 +122,8 @@ Provide a detailed and structured response.
     print(f"\nFinal Report:\n{report}")
     return report, reasoning_steps
 
+Does the following code implement properly the recommended algorithm of Reflexion?
+
 def run_reflexion(validation_instruction, document_text):
     memory = []
     context = ""
@@ -175,7 +177,7 @@ Context: "{context}"
     final_report = call_llm(report_prompt, temperature=0.7, max_tokens=1000)
     print(f"\nFinal Report:\n{final_report}")
     return final_report, memory
-
+    
 # Example usage:
 if __name__ == "__main__":
     sample_instruction = "Assess whether the model objectives align with the core model requirements."
