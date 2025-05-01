@@ -241,6 +241,103 @@ Context: "{context}"
     print(f"\nFinal Report:\n{final_report}")
     return final_report, memory
     
+# updated version 
+
+def run_reflexion(validation_instruction, document_text):
+    memory = []
+    context = ""
+    iteration = 0
+    relevancy_score = 0
+    trace_log = []
+
+    while relevancy_score < RELEVANCY_THRESHOLD and iteration < MAX_ITERATIONS:
+        iteration += 1
+        print(f"\n--- Reflexion Iteration {iteration} ---")
+
+        # Step 1: Reflect on what is missing or wrong
+        thought_prompt = f"""
+As a validation agent, you are reflecting on your past memory to decide what is missing or what needs to be corrected in order to fulfill the following instruction.
+
+Validation Instruction:
+"{validation_instruction}"
+
+Memory so far:
+"{' | '.join(memory)}"
+
+Reflect on what to improve or retrieve next.
+"""
+        thought = call_llm(thought_prompt)
+        print(f"Thought Prompt:\n{thought_prompt}\nThought Response:\n{thought}")
+        memory.append(f"Thought {iteration}: {thought}")
+        trace_log.append({"iteration": iteration, "step": "thought", "content": thought})
+
+        # Step 2: Use the reflection to generate a query
+        action_prompt = f"""
+Based on your reflection: "{thought}"
+Formulate a specific query to retrieve the missing or necessary information from the document.
+"""
+        query = call_llm(action_prompt)
+        print(f"Action Prompt:\n{action_prompt}\nAction Response:\n{query}")
+        trace_log.append({"iteration": iteration, "step": "query", "content": query})
+
+        # Step 3: Retrieve new context (simulate document search)
+        retrieval_prompt = f"""
+Use the following query to find relevant information in the document.
+
+Query: "{query}"
+
+Document:
+"{document_text}"
+
+Return the most relevant text from the document that addresses the query.
+"""
+        new_context = call_llm(retrieval_prompt)
+        print(f"Retrieval Prompt:\n{retrieval_prompt}\nRetrieved Context:\n{new_context}")
+        memory.append(f"Context {iteration}: {new_context}")
+        trace_log.append({"iteration": iteration, "step": "retrieved_context", "content": new_context})
+
+        # Step 4: Evaluate context quality
+        relevancy_score, detailed_scores = evaluate_context_quality(new_context, validation_instruction)
+        print(f"Score Breakdown: {json.dumps(detailed_scores, indent=2)}")
+        trace_log.append({
+            "iteration": iteration,
+            "step": "evaluation",
+            "scores": detailed_scores,
+            "average_score": relevancy_score
+        })
+
+        # Step 5: Feedback loop
+        if relevancy_score >= RELEVANCY_THRESHOLD:
+            print("Context is sufficiently relevant. Proceeding to report generation.")
+            context += "\n" + new_context
+            break
+        else:
+            feedback = f"Feedback: Context not sufficient (score={relevancy_score:.2f}). Reflection required."
+            memory.append(feedback)
+            trace_log.append({"iteration": iteration, "step": "feedback", "content": feedback})
+            context += "\n" + new_context
+            time.sleep(1)
+
+    # Step 6: Generate final report
+    report_prompt = f"""
+Using the validation instruction and the collected memory and context, write a structured and professional model validation report.
+
+Validation Instruction:
+"{validation_instruction}"
+
+Context:
+"{context}"
+
+Memory Log:
+"{' | '.join(memory)}"
+"""
+    final_report = call_llm(report_prompt, temperature=0.7, max_tokens=1000)
+    print(f"\nFinal Report:\n{final_report}")
+    trace_log.append({"step": "final_report", "content": final_report})
+
+    return final_report, trace_log
+    
+    
 # Example usage:
 if __name__ == "__main__":
     sample_instruction = "Assess whether the model objectives align with the core model requirements."
