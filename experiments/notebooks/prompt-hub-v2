@@ -153,3 +153,79 @@ if __name__ == "__main__":
     hub = build_prompt_hub(validation_templates, tokenizer, model, strategy="few_shot")
 
     print(json.dumps(hub, indent=2))
+
+
+
+-------
+
+The line of code that computes the log-likelihood is:
+
+return -loss * inputs["input_ids"].shape[1]  # Approximate log-likelihood
+
+This line appears inside the compute_log_likelihood() function and it does the following:
+	•	loss: is the average negative log-likelihood per token, computed internally by the model.
+	•	inputs["input_ids"].shape[1]: gives the number of tokens in the input.
+	•	-loss * number_of_tokens: gives the total (unnormalized) log-likelihood for the full prompt.
+
+This multiplication converts the per-token loss into an estimate of the full sequence log-likelihood. The negative sign flips it from a loss (lower is better) to a log-likelihood (higher is better).
+
+The line that calculates the loss is:
+
+outputs = model(**inputs, labels=inputs["input_ids"])
+loss = outputs.loss.item()
+
+Here’s what’s happening:
+	•	model(**inputs, labels=inputs["input_ids"]): This feeds the input tokens into the model and tells it to compute the loss by comparing the model’s predictions to the same input tokens (this is how language models are typically trained and evaluated).
+	•	outputs.loss: This is the cross-entropy loss returned by the model.
+	•	.item(): Extracts the scalar float value from the tensor.
+
+So, this line effectively computes the average negative log-likelihood per token.
+
+
+--------
+
+Great question!
+
+The example_block = "" line in your code acts as a default when no few_shot_examples are supplied. If you’re using a strategy like "few_shot", you should supply a list of curated example prompts. Here’s how you can populate it for testing:
+
+⸻
+
+Example Use Case: Model Validation Instruction
+
+Instruction: “Assess whether the model objectives align with the core model requirements.”
+
+Example Few-Shot Prompts (3):
+
+few_shot_examples = [
+    "Prompt: Evaluate whether the model's objectives address the business and regulatory constraints stated in the MDD.",
+    "Prompt: Review if the defined model goals comply with documented core requirements such as fairness and explainability.",
+    "Prompt: Check the alignment between technical objectives and risk management principles described in the development framework."
+]
+
+You can plug this list directly into the example_block creation inside generate_prompt_variants() like so:
+
+if strategy == "few_shot" and few_shot_examples:
+    example_block = "\n\n".join(f"Example {i+1}:\n{ex}" for i, ex in enumerate(few_shot_examples))
+
+Full Test Snippet
+
+You can try this sample directly to test the pipeline:
+
+test_guideline = "Assess whether the model objectives align with the core model requirements."
+test_context = "The model aims to predict loan risk. Core requirements include interpretability, regulatory alignment, and model robustness."
+test_examples = [
+    "Prompt: Evaluate whether the model's objectives address the business and regulatory constraints stated in the MDD.",
+    "Prompt: Review if the defined model goals comply with documented core requirements such as fairness and explainability.",
+    "Prompt: Check the alignment between technical objectives and risk management principles described in the development framework."
+]
+
+Then call:
+
+generate_prompt_variants(
+    guideline=test_guideline,
+    context=test_context,
+    strategy="few_shot",
+    tokenizer=your_tokenizer,
+    model=your_model,
+    few_shot_examples=test_examples
+)
