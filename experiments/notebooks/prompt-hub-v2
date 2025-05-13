@@ -4,9 +4,21 @@ from transformers import AutoTokenizer, AutoModelForCausalLM
 from collections import defaultdict
 from typing import List, Dict, Optional
 
+# === Helper: Extract Response After </think> ===
+
+def extract_post_think(text: str) -> str:
+    """
+    Extracts the content after the </think> tag.
+    If the tag is not found, returns the full string.
+    """
+    return text.split("</think>")[-1].strip() if "</think>" in text else text.strip()
+
 # === 1. Load Model and Tokenizer ===
 
 def load_model(model_name="deepseek-ai/deepseek-llm-7b-chat"):
+    """
+    Loads tokenizer and model from HuggingFace with correct dtype and device mapping.
+    """
     tokenizer = AutoTokenizer.from_pretrained(model_name)
     model = AutoModelForCausalLM.from_pretrained(model_name, device_map="auto", torch_dtype=torch.float16)
     model.eval()
@@ -24,7 +36,10 @@ def generate_prompt_variants(
     few_shot_examples: Optional[List[str]] = None,
     temperature=0.7
 ) -> List[str]:
-    
+    """
+    Generates multiple prompt variants using a specified prompting strategy.
+    Supports chain-of-thought, tree-of-thought, few-shot, and zero-shot.
+    """
     strategy_instruction_map = {
         "cot": "Use a step-by-step reasoning approach (Chain-of-Thought).",
         "tot": "Use a tree-structured reasoning pattern (Tree-of-Thought).",
@@ -32,12 +47,10 @@ def generate_prompt_variants(
         "zero_shot": "Answer the task without any example, using general knowledge."
     }
 
-    # Optional examples string
     example_block = ""
     if strategy == "few_shot" and few_shot_examples:
         example_block = "\n\n".join(f"Example {i+1}:\n{ex}" for i, ex in enumerate(few_shot_examples))
 
-    # Build prompt template
     prompt_template = f"""
 Instruction: {guideline}
 Context: {context}
@@ -47,9 +60,8 @@ Context: {context}
 
 Now, generate a prompt that instructs an LLM to perform this task.
 """
-
     input_ids = tokenizer(prompt_template, return_tensors="pt").input_ids.to(model.device)
-    
+
     outputs = model.generate(
         input_ids=input_ids,
         max_new_tokens=80,
@@ -57,17 +69,21 @@ Now, generate a prompt that instructs an LLM to perform this task.
         do_sample=True,
         temperature=temperature
     )
-    
-    return [tokenizer.decode(output, skip_special_tokens=True).split("Now, generate")[0].strip() for output in outputs]
+
+    return [extract_post_think(tokenizer.decode(output, skip_special_tokens=True)) for output in outputs]
 
 # === 3. Score Prompts Using Log-Likelihood ===
 
 def compute_log_likelihood(prompt: str, tokenizer, model) -> float:
+    """
+    Computes a proxy for log-likelihood by calculating negative loss times token count.
+    Used to rank prompt candidates by model confidence.
+    """
     inputs = tokenizer(prompt, return_tensors="pt").to(model.device)
     with torch.no_grad():
         outputs = model(**inputs, labels=inputs["input_ids"])
         loss = outputs.loss.item()
-    return -loss * inputs["input_ids"].shape[1]  # Approximate log-likelihood
+    return -loss * inputs["input_ids"].shape[1]
 
 # === 4. Build Prompt Hub ===
 
@@ -78,21 +94,11 @@ def build_prompt_hub(
     strategy="cot"
 ) -> Dict:
     """
-    validation_data format:
-    {
-        "Template Name": {
-            "Section Name": [
-                {
-                    "guideline": "instruction text",
-                    "context": "model development excerpt",
-                    "few_shot_examples": ["example 1", "example 2", "example 3"]
-                }
-            ]
-        }
-    }
+    Iterates over validation data and generates scored prompt variants for each guideline.
+    Returns a nested dictionary of template → section → prompt set.
     """
     prompt_hub = defaultdict(lambda: defaultdict(list))
-    
+
     for template, sections in validation_data.items():
         for section, guideline_blocks in sections.items():
             for block in guideline_blocks:
@@ -127,7 +133,6 @@ def build_prompt_hub(
 # === 5. Example Usage ===
 
 if __name__ == "__main__":
-    # Simulated sample validation input
     validation_templates = {
         "Credit Risk Template": {
             "Model Framework": [
