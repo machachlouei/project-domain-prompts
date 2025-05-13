@@ -1,0 +1,150 @@
+import json
+import torch
+from transformers import AutoTokenizer, AutoModelForCausalLM
+from collections import defaultdict
+from typing import List, Dict, Optional
+
+# === 1. Load Model and Tokenizer ===
+
+def load_model(model_name="deepseek-ai/deepseek-llm-7b-chat"):
+    tokenizer = AutoTokenizer.from_pretrained(model_name)
+    model = AutoModelForCausalLM.from_pretrained(model_name, device_map="auto", torch_dtype=torch.float16)
+    model.eval()
+    return tokenizer, model
+
+# === 2. Generate Prompt Variants ===
+
+def generate_prompt_variants(
+    guideline: str,
+    context: str,
+    strategy: str,
+    tokenizer,
+    model,
+    num_variants=3,
+    few_shot_examples: Optional[List[str]] = None,
+    temperature=0.7
+) -> List[str]:
+    
+    strategy_instruction_map = {
+        "cot": "Use a step-by-step reasoning approach (Chain-of-Thought).",
+        "tot": "Use a tree-structured reasoning pattern (Tree-of-Thought).",
+        "few_shot": "Follow the format of the few-shot examples provided.",
+        "zero_shot": "Answer the task without any example, using general knowledge."
+    }
+
+    # Optional examples string
+    example_block = ""
+    if strategy == "few_shot" and few_shot_examples:
+        example_block = "\n\n".join(f"Example {i+1}:\n{ex}" for i, ex in enumerate(few_shot_examples))
+
+    # Build prompt template
+    prompt_template = f"""
+Instruction: {guideline}
+Context: {context}
+{strategy_instruction_map.get(strategy, '')}
+
+{example_block}
+
+Now, generate a prompt that instructs an LLM to perform this task.
+"""
+
+    input_ids = tokenizer(prompt_template, return_tensors="pt").input_ids.to(model.device)
+    
+    outputs = model.generate(
+        input_ids=input_ids,
+        max_new_tokens=80,
+        num_return_sequences=num_variants,
+        do_sample=True,
+        temperature=temperature
+    )
+    
+    return [tokenizer.decode(output, skip_special_tokens=True).split("Now, generate")[0].strip() for output in outputs]
+
+# === 3. Score Prompts Using Log-Likelihood ===
+
+def compute_log_likelihood(prompt: str, tokenizer, model) -> float:
+    inputs = tokenizer(prompt, return_tensors="pt").to(model.device)
+    with torch.no_grad():
+        outputs = model(**inputs, labels=inputs["input_ids"])
+        loss = outputs.loss.item()
+    return -loss * inputs["input_ids"].shape[1]  # Approximate log-likelihood
+
+# === 4. Build Prompt Hub ===
+
+def build_prompt_hub(
+    validation_data: Dict[str, Dict[str, List[Dict]]],
+    tokenizer,
+    model,
+    strategy="cot"
+) -> Dict:
+    """
+    validation_data format:
+    {
+        "Template Name": {
+            "Section Name": [
+                {
+                    "guideline": "instruction text",
+                    "context": "model development excerpt",
+                    "few_shot_examples": ["example 1", "example 2", "example 3"]
+                }
+            ]
+        }
+    }
+    """
+    prompt_hub = defaultdict(lambda: defaultdict(list))
+    
+    for template, sections in validation_data.items():
+        for section, guideline_blocks in sections.items():
+            for block in guideline_blocks:
+                guideline = block["guideline"]
+                context = block.get("context", "")
+                examples = block.get("few_shot_examples", [])
+
+                prompt_variants = generate_prompt_variants(
+                    guideline=guideline,
+                    context=context,
+                    strategy=strategy,
+                    tokenizer=tokenizer,
+                    model=model,
+                    few_shot_examples=examples
+                )
+                scored_prompts = [
+                    {
+                        "text": p,
+                        "log_likelihood": compute_log_likelihood(p, tokenizer, model)
+                    }
+                    for p in prompt_variants
+                ]
+                scored_prompts.sort(key=lambda x: x["log_likelihood"], reverse=True)
+
+                prompt_hub[template][section].append({
+                    "guideline": guideline,
+                    "strategy": strategy,
+                    "prompts": scored_prompts
+                })
+    return prompt_hub
+
+# === 5. Example Usage ===
+
+if __name__ == "__main__":
+    # Simulated sample validation input
+    validation_templates = {
+        "Credit Risk Template": {
+            "Model Framework": [
+                {
+                    "guideline": "Assess whether the model objectives align with the core model requirements.",
+                    "context": "The model aims to detect risk in small business loans. Core requirements include fairness, explainability, and compliance.",
+                    "few_shot_examples": [
+                        "Prompt: Evaluate whether the objectives defined in the document are supported by technical and compliance requirements.",
+                        "Prompt: Analyze how the model design principles align with the original goals stated for the risk prediction.",
+                        "Prompt: Determine whether core compliance constraints are reflected in the model objectives."
+                    ]
+                }
+            ]
+        }
+    }
+
+    tokenizer, model = load_model()
+    hub = build_prompt_hub(validation_templates, tokenizer, model, strategy="few_shot")
+
+    print(json.dumps(hub, indent=2))
