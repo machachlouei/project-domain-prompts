@@ -1,3 +1,6 @@
+import json
+import re
+
 def evaluate_context_quality(context, validation_instruction, max_retries):
     """
     Evaluate retrieved context against a validation instruction using:
@@ -6,6 +9,7 @@ def evaluate_context_quality(context, validation_instruction, max_retries):
     - Specificity (20%)
     Each criterion includes both a numeric score (1–5) and justification.
     """
+
     evaluation_prompt = f"""
 Evaluate the following retrieved context in relation to the validation instruction using three criteria:
 
@@ -35,21 +39,32 @@ Return your evaluation as a JSON object in the following format:
     "Justification": "Explanation..."
   }}
 }}
+
 Where X, Y, Z are scores from 1 (very poor) to 5 (excellent).
 Do not include any commentary outside the JSON structure.
 """
 
     for attempt in range(max_retries):
-        response = call_llm(evaluation_prompt, temperature=0.3, max_tokens=MAX_TOKENS, system_prompt=SYSTEM_PROMPT)
-        try:
-            scores = json.loads(response.strip())
+        response = call_llm(
+            evaluation_prompt,
+            temperature=0.3,
+            max_tokens=MAX_TOKENS,
+            system_prompt=SYSTEM_PROMPT
+        )
 
-            # Ensure all required metrics are present
+        try:
+            # Remove markdown code block markers
+            clean_response = re.sub(r"```(?:json)?", "", response, flags=re.IGNORECASE).strip()
+
+            print(f"[DEBUG] Cleaned response before parsing:\n{clean_response}\n")
+
+            scores = json.loads(clean_response)
+
+            # Validate keys
             for metric in ["Relevancy", "Completeness", "Specificity"]:
                 if metric not in scores or "Score" not in scores[metric]:
                     raise ValueError(f"Missing score for {metric}")
 
-            # Apply weighted scoring
             avg_score = (
                 scores["Relevancy"]["Score"] * 0.5 +
                 scores["Completeness"]["Score"] * 0.3 +
@@ -66,9 +81,9 @@ Do not include any commentary outside the JSON structure.
 
         except Exception as e:
             print(f"[Error] Attempt {attempt + 1} failed during evaluation: {e}")
-            print(f"Raw response: {response}")
+            print(f"[Raw response]:\n{response}\n")
 
-    # Fallback if all attempts fail
+    # Fallback
     print("[Fallback] All evaluation attempts failed. Returning default low scores.")
     return 1, {
         "Relevancy": {"Score": 1, "Justification": "Parsing failed."},
@@ -81,14 +96,10 @@ Do not include any commentary outside the JSON structure.
     }
 
 def react_validation_assessment(validation_instruction, text):
-    """
-    Implements the ReAct framework for validation assessment.
-    Iterates dynamically until relevancy threshold is reached.
-    """
     reasoning_steps = []
-    context = ""  # Start with an empty context
+    context = ""
     iteration = 0
-    relevancy_score = 0  # Initialize relevancy score
+    relevancy_score = 0
 
     while relevancy_score < RELEVANCY_THRESHOLD and iteration < MAX_ITERATIONS:
         iteration += 1
@@ -103,7 +114,6 @@ What additional information is needed for a thorough assessment? Provide a conci
 """
         system_prompt = "Provide a concise answer in 1–3 sentences maximum."
         thought = call_llm(thought_prompt, temperature=0.3, max_tokens=500, system_prompt=system_prompt)
-        print("\nThought Prompt:\n", thought_prompt)
         print("Generated Thought:\n", thought)
         reasoning_steps.append(f"Thought (iteration {iteration}): {thought}")
 
@@ -113,7 +123,6 @@ Based on the thought: "{thought}",
 formulate a query to retrieve missing contextual details from the Model Development Document.
 """
         action_1 = call_llm(action_prompt_for_query_formulation, temperature=0.3, max_tokens=500, system_prompt=system_prompt)
-        print("\nQuery Formulation Prompt:\n", action_prompt_for_query_formulation)
         print("Generated Action (Query):\n", action_1)
         reasoning_steps.append(f"Action (iteration {iteration}) (Query Formulation): {action_1}")
 
@@ -124,11 +133,10 @@ QUERY: {action_1}
 CONTEXT: "{text}"
 """
         additional_context = call_llm(action_prompt_retrieve_context, temperature=0.3, max_tokens=500, system_prompt=system_prompt)
-        print("\nRetrieve Context Prompt:\n", action_prompt_retrieve_context)
-        print("Retrieved Addition Context:\n", additional_context)
+        print("Retrieved Additional Context:\n", additional_context)
         reasoning_steps.append(f"Action (iteration {iteration}) (Context Retrieved): {additional_context}")
 
-        # 4. Evaluate Retrieved Context Quality (enhanced with reasoning)
+        # 4. Evaluate Retrieved Context Quality
         avg_score, scores, explanations = evaluate_context_quality(additional_context, validation_instruction, max_retries=3)
         relevancy_score = avg_score
 
@@ -156,7 +164,6 @@ Context: {context}
 Provide a detailed and structured response.
 """
     validation_report = call_llm(report_prompt, temperature=0.7, max_tokens=2000, system_prompt=system_prompt)
-    print("\nFinal Report Prompt:\n", report_prompt)
     print("Generated Validation Report:\n", validation_report)
 
     return validation_report, reasoning_steps
