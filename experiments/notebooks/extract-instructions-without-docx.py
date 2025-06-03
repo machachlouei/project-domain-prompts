@@ -1,3 +1,5 @@
+#=== version 1 ===========================
+
 import zipfile
 import xml.etree.ElementTree as ET
 
@@ -65,7 +67,7 @@ df.to_csv("output_sections.csv", index=False)
 df.to_excel("output_sections.xlsx", index=False)
 
 
-#================================
+#=== version 2 =============================
 
 def extract_hierarchical_structure(path):
     """
@@ -148,4 +150,97 @@ df = extract_hierarchical_structure(file_path)
 print(df.head())
 df.to_csv("structured_sections.csv", index=False)
 
+#==  version 3 =======================
+import zipfile
+import xml.etree.ElementTree as ET
+import pandas as pd
+
+def extract_paragraphs_with_styles(path):
+    """
+    Extracts paragraphs and associated styles from a .docx file using raw XML.
+    Returns a list of (text, style) tuples.
+    """
+    paragraphs = []
+    with zipfile.ZipFile(path) as docx:
+        xml_content = docx.read('word/document.xml')
+        tree = ET.XML(xml_content)
+
+        for elem in tree.iter():
+            if elem.tag.endswith('}p'):
+                text = ''
+                style = 'Normal'
+                for child in elem.iter():
+                    if child.tag.endswith('}t'):
+                        text += child.text or ''
+                    if child.tag.endswith('}pStyle'):
+                        style = child.attrib.get('{http://schemas.openxmlformats.org/wordprocessingml/2006/main}val', 'Normal')
+                if text.strip():
+                    paragraphs.append((text.strip(), style))
+    return paragraphs
+
+def extract_structure_from_styles(path):
+    """
+    Extracts section and subsection structure using Heading1 and Heading2 styles from a .docx file.
+
+    Parameters:
+        path (str): Path to the input .docx file.
+
+    Returns:
+        pd.DataFrame: Structured DataFrame with section/subsection metadata and associated text.
+    """
+    paragraphs = extract_paragraphs_with_styles(path)
+    data = []
+
+    current_section_name = ""
+    current_subsection_name = ""
+    current_text = []
+
+    for text, style in paragraphs:
+        if style == "Heading1":
+            # Save previous subsection before starting new section
+            if current_subsection_name and current_text:
+                data.append({
+                    "Section_number": "",
+                    "Section_name": current_section_name,
+                    "Subsection_number": "",
+                    "Subsection_name": current_subsection_name,
+                    "Subsection_text": " ".join(current_text).strip()
+                })
+            current_section_name = text
+            current_subsection_name = ""
+            current_text = []
+
+        elif style == "Heading2":
+            if current_subsection_name and current_text:
+                data.append({
+                    "Section_number": "",
+                    "Section_name": current_section_name,
+                    "Subsection_number": "",
+                    "Subsection_name": current_subsection_name,
+                    "Subsection_text": " ".join(current_text).strip()
+                })
+            current_subsection_name = text
+            current_text = []
+
+        else:
+            current_text.append(text)
+
+    # Append the final subsection
+    if current_subsection_name and current_text:
+        data.append({
+            "Section_number": "",
+            "Section_name": current_section_name,
+            "Subsection_number": "",
+            "Subsection_name": current_subsection_name,
+            "Subsection_text": " ".join(current_text).strip()
+        })
+
+    return pd.DataFrame(data)
+    
+    
+file_path = "your_file.docx"
+df = extract_structure_from_styles(file_path)
+
+print(df.head())
+df.to_csv("structured_output.csv", index=False)
 
