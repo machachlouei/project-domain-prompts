@@ -244,3 +244,22 @@ df = extract_structure_from_styles(file_path)
 print(df.head())
 df.to_csv("structured_output.csv", index=False)
 
+#====== Extract small units of instructions 
+
+Prompt template:
+You are given a paragraph of technical documentation or guidance text from a model validation document. 
+
+Your task is to extract all **distinct guideline instructions** from the text. Each instruction should:
+- Start with an action verb (e.g., "Review", "Assess", "Describe", "Document").
+- Be self-contained and actionable.
+- Be concise, no longer than 1–2 sentences each.
+
+Format your output as a bullet list of instructions.
+
+Text:
+"""
+{Insert Subsection_text here}
+"""
+
+
+
