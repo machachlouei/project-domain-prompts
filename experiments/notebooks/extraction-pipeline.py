@@ -1,4 +1,6 @@
 import os
+import re
+import docx
 
 def rename_files_in_directory(directory_path):
     """
