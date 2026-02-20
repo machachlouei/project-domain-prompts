@@ -1,10 +1,9 @@
+import os
+
 import openai
 import time
 
-# Define API Key (Use your OpenAI API key or a local LLM endpoint)
-API_KEY = "your_openai_api_key"
-
-openai.api_key = API_KEY
+openai.api_key = os.environ["OPENAI_API_KEY"]
 
 # Predefined validation assessment instruction
 validation_instruction = "Assess whether core requirements align with model objectives."
