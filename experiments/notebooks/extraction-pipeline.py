@@ -1,4 +1,6 @@
 import os
+import re
+import docx
 
 def rename_files_in_directory(directory_path):
     """
@@ -90,45 +92,7 @@ def extract_sections_and_section_numbers(docx_file):
             sections[section_name] = section_number
 
     return sections
-    
-def extract_sections_and_section_numbers(docx_file):
-    """
-    Extracts section numbers (e.g., '1.1', '2.3') and section titles from a .docx file.
 
-    Parameters:
-    docx_file (str): Path to the input .docx file.
-
-    Returns:
-    dict: A dictionary mapping section titles to section numbers.
-    """
-    doc = docx.Document(docx_file)
-    result, current_section, current_heading, current_text = [], None, None, []
-
-    section_regex = re.compile(r'^(\d+(\.\d+)*)\s+(.+)')
-
-    for para in doc.paragraphs:
-        match = section_regex.match(para.text)
-        if match:
-            if current_section:
-                result.append([current_section, current_heading, ' '.join(current_text)])
-            current_section, current_heading, current_text = match.group(1), match.group(3), []
-        else:
-            if para.text.strip():
-                current_text.append(para.text.strip())
-
-    if current_section:
-        result.append([current_section, current_heading, ' '.join(current_text)])
-
-    sections = {}
-    for section in result:
-        if not section[1]:  # Skip if heading is empty
-            section_data = re.sub(r'\t+| +', ' ', section[0])
-            section_number = section_data.split(" ")[0]
-            section_name = section_data.lstrip(f"{section_number} ")
-            sections[section_name] = section_number
-
-    return sections
-    
 def create_section_knowledge_database(file_path):
     """
     Creates a structured knowledge database from a single .docx file using headings and section metadata.
