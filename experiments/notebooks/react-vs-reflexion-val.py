@@ -1,10 +1,11 @@
+import os
 import openai
 import time
 import json
 import re
 
 # Set your OpenAI API key
-openai.api_key = "your_openai_api_key"
+openai.api_key = os.environ["OPENAI_API_KEY"]
 
 RELEVANCY_THRESHOLD = 4.0
 MAX_ITERATIONS = 5
