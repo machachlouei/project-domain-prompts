@@ -13,7 +13,7 @@ def call_llm(prompt, temperature=0.3, max_tokens=500, system_prompt="You are an 
     response = openai.ChatCompletion.create(
         model="gpt-4o",
         messages=[
-            {"role": " "system", "content": system_prompt},
+            {"role": "system", "content": system_prompt},
             {"role": "user", "content": prompt}
         ],
         temperature=temperature,
