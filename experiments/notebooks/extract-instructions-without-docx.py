@@ -1,7 +1,10 @@
 #=== version 1 ===========================
 
+import os
+import re
 import zipfile
 import xml.etree.ElementTree as ET
+import pandas as pd
 
 def extract_paragraphs_from_docx(path):
     """
@@ -269,7 +272,7 @@ import pandas as pd
 import openai
 import time
 
-openai.api_key = "your-api-key"  # Replace with your OpenAI key
+openai.api_key = os.environ["OPENAI_API_KEY"]
 
 def extract_paragraphs_with_styles(path):
     """

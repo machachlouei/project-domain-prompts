@@ -1,3 +1,31 @@
+import json
+import os
+import time
+
+import openai
+
+openai.api_key = os.environ["OPENAI_API_KEY"]
+
+RELEVANCY_THRESHOLD = 4.0
+MAX_ITERATIONS = 5
+
+system_prompt = "You are an AI assisting with model validation."
+
+
+def call_llm(prompt, temperature=0.3, max_tokens=500, system_prompt=""):
+    messages = []
+    if system_prompt:
+        messages.append({"role": "system", "content": system_prompt})
+    messages.append({"role": "user", "content": prompt})
+    response = openai.ChatCompletion.create(
+        model="gpt-4",
+        messages=messages,
+        max_tokens=max_tokens,
+        temperature=temperature,
+    )
+    return response["choices"][0]["message"]["content"]
+
+
 def evaluate_context_quality(context, validation_instruction, max_retries=2):
     """
     Evaluate retrieved context against a validation instruction using:
@@ -111,13 +139,12 @@ def react_validation_assessment(validation_instruction, text):
         reasoning_steps.append(f"Action {iteration} (Context Retrieved): {additional_context}")
 
         # 4. Evaluate Retrieved Context Quality (enhanced with reasoning)
-        avg_score, scores, explanations = evaluate_context_quality(additional_context, validation_instruction)
+        avg_score, scores = evaluate_context_quality(additional_context, validation_instruction)
         relevancy_score = avg_score
 
         print("\nContext Evaluation Scores:")
-        for metric, score in scores.items():
-            explanation = explanations.get(metric, "")
-            print(f"{metric}: {score} — {explanation}")
+        for metric, data in scores.items():
+            print(f"{metric}: {data['Score']} — {data.get('Justification', '')}")
         print(f"Average Relevancy Score: {avg_score}")
 
         if relevancy_score >= RELEVANCY_THRESHOLD:

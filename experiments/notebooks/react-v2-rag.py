@@ -1,3 +1,5 @@
+import os
+
 import faiss
 import numpy as np
 import openai
@@ -5,9 +7,7 @@ import time
 from sentence_transformers import SentenceTransformer
 from docx import Document
 
-# Define API Key (Use your OpenAI API key or a local LLM endpoint)
-API_KEY = "your_openai_api_key"
-openai.api_key = API_KEY
+openai.api_key = os.environ["OPENAI_API_KEY"]
 
 # Load sentence transformer for embedding
 embedding_model = SentenceTransformer("BAAI/bge-base-en")
@@ -125,6 +125,7 @@ mdd_chunks = load_mdd("model_development_document.docx")
 faiss_index, text_chunks = create_faiss_index(mdd_chunks)
 
 # Run ReAct-based Validation Assessment with FAISS-based RAG
+validation_instruction = "Assess whether core model requirements align with model objectives."
 generated_report, reasoning_trace = react_validation_assessment(validation_instruction, faiss_index, text_chunks)
 
 # Print the validation report

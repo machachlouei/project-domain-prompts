@@ -3,6 +3,9 @@ import time
 import uuid
 from typing import List, Tuple
 
+import ace_tools as tools
+import pandas as pd
+
 # Mocked LLM call function
 def call_llm(prompt: str, system_prompt: str = "", temperature: float = 0.3, max_tokens: int = 500) -> str:
     # Simulate a language model response (placeholder)
@@ -78,9 +81,6 @@ validation_instruction = "Assess whether core model requirements align with mode
 context_document = "Core model requirements include accuracy, robustness, and interpretability..."
 
 trace_log = react_reflexion_analysis(validation_instruction, context_document)
-
-import pandas as pd
-import ace_tools as tools
 
 df = pd.DataFrame(trace_log)
 tools.display_dataframe_to_user(name="ReAct + Reflexion Step-by-Step Trace", dataframe=df)
