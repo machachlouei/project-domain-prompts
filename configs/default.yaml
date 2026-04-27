@@ -1,0 +1,23 @@
+models:
+  - gpt-4o
+  - llama3
+  - qwen7b
+
+techniques:
+  - zero_shot
+  - few_shot
+  - cot
+  - few_shot_cot
+  - tree_of_thought
+  - react
+  - reflexion
+
+run:
+  repetitions: 3
+  temperature: 0.0
+  max_tokens: 1024
+  seed: 42
+
+paths:
+  inputs: data/examples/sample-input-v2.json
+  outputs: experiments/outputs/runs

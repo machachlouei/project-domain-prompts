@@ -1,0 +1,64 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mrm-prompt-bench"
+version = "0.1.0"
+description = "Prompt-engineering benchmark for instruction-following document generation in Model Risk Management (SR 11-7) validation reports."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { file = "LICENSE" }
+authors = [{ name = "Matt Achachlouei" }]
+keywords = ["llm", "prompt-engineering", "react", "chain-of-thought", "model-validation", "sr11-7"]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Intended Audience :: Science/Research",
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+dynamic = ["dependencies"]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=7",
+  "ruff>=0.4",
+  "black>=24",
+  "mypy>=1.8",
+]
+
+[project.urls]
+Homepage = "https://github.com/machachlouei/mrm-prompt-bench"
+Issues   = "https://github.com/machachlouei/mrm-prompt-bench/issues"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.dynamic]
+dependencies = { file = ["requirements.txt"] }
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+exclude = ["_archive", "notebooks", "experiments/outputs"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "SIM", "N"]
+ignore = ["E501"]
+
+[tool.black]
+line-length = 100
+target-version = ["py310"]
+extend-exclude = "_archive|experiments/outputs"
+
+[tool.mypy]
+python_version = "3.10"
+ignore_missing_imports = true
+exclude = ["_archive/", "experiments/outputs/"]

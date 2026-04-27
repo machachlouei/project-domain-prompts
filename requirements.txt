@@ -1,0 +1,16 @@
+openai>=1.0
+transformers
+torch
+sentence-transformers
+faiss-cpu
+langchain
+langchain-community
+llama-index
+python-docx
+pandas
+numpy
+scipy
+scikit-learn
+pyyaml
+python-dotenv
+pytest
